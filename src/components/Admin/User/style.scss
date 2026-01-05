@@ -1,0 +1,45 @@
+.user-admin-container {
+  padding: 24px;
+  background: #f0f2f5; // Light gray background for the whole page area
+  min-height: 80vh;
+
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    background: #fff;
+    padding: 16px 24px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+    .page-title {
+      font-size: 24px;
+      font-weight: 600;
+      color: #1f1f1f;
+      margin: 0;
+    }
+  }
+
+  .filter-bar {
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 8px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .ant-table-wrapper {
+    background: white;
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+    .ant-table-thead > tr > th {
+      background: #fafafa;
+      font-weight: 600;
+    }
+  }
+}

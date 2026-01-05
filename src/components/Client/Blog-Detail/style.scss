@@ -1,0 +1,213 @@
+.blog-detail-page {
+  background-color: #f9f9f9;
+  min-height: 100vh;
+  padding: 40px 20px 80px;
+  .blog-detail-loading,
+  .blog-detail-not-found {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    gap: 20px;
+
+    h2 {
+      font-size: 24px;
+      color: #333;
+    }
+  }
+
+  .blog-detail-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    padding: 40px;
+
+    @media (max-width: 768px) {
+      padding: 20px;
+    }
+
+    .blog-breadcrumb {
+      margin-bottom: 30px;
+
+      .bc-link {
+        cursor: pointer;
+        &:hover {
+          color: #004d40;
+        }
+      }
+    }
+
+    .blog-header {
+      text-align: center;
+      margin-bottom: 40px;
+
+      .blog-meta-top {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-bottom: 16px;
+        color: #666;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 500;
+
+        span {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+
+        .blog-category {
+          color: #004d40;
+          font-weight: 700;
+        }
+      }
+
+      .blog-title {
+        font-size: 36px;
+        font-weight: 800;
+        color: #1a1a1a;
+        line-height: 1.3;
+        margin-bottom: 24px;
+
+        @media (max-width: 768px) {
+          font-size: 24px;
+        }
+      }
+
+      .blog-author {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+
+        .author-avatar {
+          width: 40px;
+          height: 40px;
+          background: #e0f2f1;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #004d40;
+          font-size: 18px;
+        }
+
+        .author-info {
+          text-align: left;
+          display: flex;
+          flex-direction: column;
+
+          .author-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 15px;
+          }
+
+          .author-role {
+            font-size: 12px;
+            color: #888;
+          }
+        }
+      }
+    }
+
+    .blog-featured-image {
+      margin-bottom: 40px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      height: 500px;
+
+      img {
+        width: 100%;
+        height: 100%; // Fill container
+        object-fit: cover; // Maintain aspect ratio without distortion
+        display: block;
+        transition: transform 0.5s ease;
+
+        &:hover {
+          transform: scale(1.02);
+        }
+      }
+    }
+
+    .blog-content-wrapper {
+      .blog-content {
+        font-size: 18px;
+        line-height: 1.8;
+        color: #2c3e50;
+
+        p {
+          margin-bottom: 24px;
+        }
+
+        h2,
+        h3,
+        h4 {
+          color: #1a1a1a;
+          font-weight: 700;
+          margin-top: 40px;
+          margin-bottom: 20px;
+        }
+
+        h2 {
+          font-size: 28px;
+        }
+        h3 {
+          font-size: 24px;
+        }
+        h4 {
+          font-size: 20px;
+        }
+
+        ul,
+        ol {
+          margin-bottom: 24px;
+          padding-left: 24px;
+
+          li {
+            margin-bottom: 12px;
+          }
+        }
+
+        blockquote {
+          border-left: 4px solid #004d40;
+          padding-left: 20px;
+          margin: 30px 0;
+          font-style: italic;
+          color: #555;
+          background: #f0f7f6;
+          padding: 20px;
+          border-radius: 0 8px 8px 0;
+        }
+
+        img {
+          max-width: 100%;
+          border-radius: 8px;
+          margin: 20px 0;
+        }
+      }
+
+      .blog-footer {
+        margin-top: 60px;
+        padding-top: 30px;
+        border-top: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .back-btn {
+          &:hover {
+            color: #004d40;
+            border-color: #004d40;
+          }
+        }
+      }
+    }
+  }
+}

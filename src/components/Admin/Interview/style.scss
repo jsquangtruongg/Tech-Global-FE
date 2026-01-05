@@ -1,0 +1,88 @@
+.interview-admin {
+  .header-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+
+    h3 {
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    &__right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+  }
+
+  .topics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .topic-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 14px;
+    background-color: #fafafa;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .topic-item:hover {
+    background-color: #f0f9ff;
+    border-color: #e6f7ff;
+  }
+  .topic-item.active {
+    background-color: #e6f7ff;
+    border-color: #1890ff;
+  }
+  .topic-name {
+    font-weight: 600;
+    color: #283136;
+  }
+
+  .sections-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 8px 0 16px;
+    flex-wrap: wrap;
+  }
+  .section-tag {
+    padding: 6px 10px;
+    border-radius: 16px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .section-tag.active {
+    color: #1890ff;
+    border-color: #1890ff;
+    background-color: #e6f7ff;
+  }
+
+  .questions-filter {
+    margin-bottom: 10px;
+  }
+  .level-filter {
+    cursor: pointer;
+    user-select: none;
+  }
+  .level-filter.active {
+    color: #1890ff;
+    border-color: #1890ff;
+    background-color: #e6f7ff;
+  }
+
+  .ant-table-thead > tr > th {
+    background-color: #fafafa;
+    font-weight: 600;
+  }
+}

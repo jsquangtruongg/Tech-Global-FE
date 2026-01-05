@@ -1,0 +1,118 @@
+.dashboard-admin {
+  .dashboard-header {
+    margin-bottom: 24px;
+
+    .header-title {
+      font-size: 30px;
+      font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+      font-weight: 600;
+      color: #262626;
+      margin-bottom: 8px;
+    }
+
+    .header-subtitle {
+      font-size: 14px;
+      color: #8c8c8c;
+      margin-left: 10px;
+    }
+  }
+
+  .dashboard-stats {
+    margin-bottom: 24px;
+
+    .stat-card {
+      height: 100%;
+      border-radius: 8px;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+      transition: all 0.3s ease;
+
+      &:hover {
+        box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.08);
+      }
+
+      .ant-statistic-title {
+        font-size: 14px;
+        color: #8c8c8c;
+        margin-bottom: 8px;
+      }
+
+      .ant-statistic-content {
+        font-size: 24px;
+        font-weight: 600;
+
+        .anticon {
+          font-size: 24px;
+          margin-right: 8px;
+        }
+      }
+
+      .stat-footer {
+        margin-top: 16px;
+        padding-top: 16px;
+        border-top: 1px solid #f0f0f0;
+        font-size: 12px;
+
+        .text-success {
+          color: #52c41a;
+          margin-right: 8px;
+        }
+
+        .text-danger {
+          color: #ff4d4f;
+          margin-right: 8px;
+        }
+
+        .text-muted {
+          color: #8c8c8c;
+        }
+      }
+    }
+  }
+
+  .dashboard-charts {
+    .chart-card {
+      height: 100%;
+      border-radius: 8px;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+
+      .ant-card-head {
+        border-bottom: 1px solid #f0f0f0;
+        min-height: 48px;
+
+        .ant-card-head-title {
+          font-size: 16px;
+          font-weight: 600;
+        }
+      }
+
+      .ant-card-body {
+        padding: 24px;
+      }
+
+      // Remove default outline/border on focus for Recharts
+      .recharts-wrapper {
+        outline: none !important;
+
+        * {
+          outline: none !important;
+        }
+
+        &:focus {
+          outline: none !important;
+        }
+      }
+
+      .recharts-surface:focus,
+      .recharts-layer:focus,
+      .recharts-sector:focus,
+      .recharts-bar-rectangle:focus,
+      .recharts-curve:focus,
+      .recharts-dot:focus,
+      path:focus,
+      rect:focus,
+      g:focus {
+        outline: none !important;
+      }
+    }
+  }
+}

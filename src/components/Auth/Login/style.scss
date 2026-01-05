@@ -1,0 +1,90 @@
+.auth-form-wrapper {
+  width: 100%;
+
+  .auth-title {
+    margin-bottom: 30px;
+
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 8px;
+    }
+
+    p {
+      font-size: 14px;
+      color: #6b7280;
+      line-height: 1.5;
+    }
+  }
+
+  .auth-form-content {
+    width: 400px;
+    max-width: 500px;
+    .form-main {
+      .forgot-password {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 20px;
+        margin-top: -10px;
+
+        a {
+          font-size: 13px;
+          color: #4aaf52;
+          text-decoration: none;
+          font-weight: 500;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+
+      .form-actions {
+        margin-top: 10px;
+
+        .btn-submit {
+          width: 100%;
+          padding: 12px;
+          background-color: #4aaf52; // Green
+          color: #ffffff;
+          font-size: 16px;
+          font-weight: 600;
+          border: none;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: background-color 0.2s;
+
+          &:hover {
+            background-color: #46b156;
+          }
+
+          &:active {
+            transform: translateY(1px);
+          }
+        }
+      }
+
+      .auth-footer {
+        margin-top: 24px;
+        text-align: center;
+
+        p {
+          font-size: 14px;
+          color: #6b7280;
+
+          a {
+            color: #4aaf52;
+            text-decoration: none;
+            font-weight: 600;
+            margin-left: 4px;
+
+            &:hover {
+              text-decoration: underline;
+            }
+          }
+        }
+      }
+    }
+  }
+}

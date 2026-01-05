@@ -1,0 +1,112 @@
+.navbar-layout {
+  width: 300px;
+  height: calc(100vh - 70px); // Trừ đi chiều cao header
+  background-color: #fff;
+  border-right: 1px solid #f0f0f0;
+  position: fixed;
+  left: 0;
+  top: 70px; // Đẩy xuống dưới header
+  z-index: 900;
+  transition: all 0.3s ease;
+
+  .navbar-container {
+    height: 100%;
+    padding: 20px 16px;
+    overflow-y: auto;
+
+    .navbar-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+
+      .navbar-item-group {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .navbar-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        color: #5f6368;
+
+        &__content {
+          display: flex;
+          align-items: center;
+        }
+
+        &:hover {
+          background-color: #f6f8fa;
+          color: #283136;
+        }
+
+        &.active {
+          background-color: #e6f7ff;
+          color: #1890ff;
+          font-weight: 500;
+
+          .navbar-item__icon {
+            color: #1890ff;
+          }
+        }
+
+        &__icon {
+          display: flex;
+          align-items: center;
+          font-size: 20px;
+          margin-right: 12px;
+          color: #5f6368;
+          transition: color 0.2s ease;
+        }
+
+        &__label {
+          font-family: "Inter", sans-serif;
+          font-size: 15px;
+          line-height: 1.5;
+        }
+
+        &__toggle {
+          font-size: 12px;
+          color: #8c8c8c;
+        }
+
+        &.submenu-item {
+          padding-left: 48px;
+          font-size: 14px;
+
+          &:hover {
+            background-color: transparent;
+            color: #1890ff;
+          }
+
+          &.active {
+            background-color: transparent;
+            color: #1890ff;
+            font-weight: 600;
+          }
+        }
+      }
+
+      .navbar-submenu {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        overflow: hidden;
+        max-height: 0;
+        opacity: 0;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+        &.open {
+          max-height: 200px; // Đủ lớn để chứa các item con
+          opacity: 1;
+          margin-top: 4px;
+        }
+      }
+    }
+  }
+}
