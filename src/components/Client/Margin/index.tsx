@@ -37,12 +37,12 @@ const MarginComponent = () => {
       const res = await getInterviewTreeAPI(market);
       if (res.err === 0 && Array.isArray(res.data)) {
         setTreeData(res.data);
-        
+
         // Initialize selection defaults
         if (res.data.length > 0) {
           const firstTopic = res.data[0];
           setActiveTab(String(firstTopic.id));
-          
+
           if (firstTopic.sections && firstTopic.sections.length > 0) {
             setSelectedTopic(firstTopic.sections[0].name);
           } else {
@@ -100,7 +100,12 @@ const MarginComponent = () => {
   };
 
   const handleStudyClick = () => {
-    navigate("/study");
+    const sectionId = activeSectionData?.id;
+    if (sectionId) {
+      navigate(`/study?sectionId=${sectionId}`);
+    } else {
+      navigate("/study");
+    }
   };
 
   const levels: (
@@ -129,7 +134,7 @@ const MarginComponent = () => {
                 câu hỏi trắc nghiệm Technical, Fundamental & Psychology
               </span>
             </div>
-            
+
             {/* Market Selector */}
             <div style={{ marginTop: 20, marginBottom: 20 }}>
               <Segmented<IMarket>
@@ -174,7 +179,7 @@ const MarginComponent = () => {
                   onChange={(k) => {
                     setActiveTab(k);
                     // When changing tab, select first section of new tab
-                    const newTopic = treeData.find(t => String(t.id) === k);
+                    const newTopic = treeData.find((t) => String(t.id) === k);
                     if (newTopic?.sections?.length) {
                       setSelectedTopic(newTopic.sections[0].name);
                     } else {
@@ -192,23 +197,26 @@ const MarginComponent = () => {
                       onClick={() => setSelectedTopic(item.name)}
                     >
                       <span className="pill-name">{item.name}</span>
-                      <span className="pill-count">{item.questions?.length || 0}</span>
+                      <span className="pill-count">
+                        {item.questions?.length || 0}
+                      </span>
                     </button>
                   ))}
                 </div>
-                
+
                 {selectedTopic ? (
                   <div className="questions-section">
                     <div className="questions-header">
                       <h2 className="questions-title">
-                        Top {questions.length} câu hỏi{" "}
-                        {selectedTopic}
+                        Top {questions.length} câu hỏi {selectedTopic}
                       </h2>
                       <div className="question-filters">
                         {levels.map((lv) => (
                           <button
                             key={lv}
-                            className={`filter ${levelFilter === lv ? "active" : ""}`}
+                            className={`filter ${
+                              levelFilter === lv ? "active" : ""
+                            }`}
                             onClick={() => setLevelFilter(lv)}
                           >
                             {lv}
@@ -220,11 +228,15 @@ const MarginComponent = () => {
                       {visibleQuestions.length > 0 ? (
                         visibleQuestions.map((q) => (
                           <div key={q.id} className="question-card">
-                            <div className="q-badge">{String(q.id).padStart(2, "0")}</div>
+                            <div className="q-badge">
+                              {String(q.id).padStart(2, "0")}
+                            </div>
                             <div className="q-content">
                               <p className="q-text">{q.question}</p>
                             </div>
-                            <div className={`q-level level-${q.level.toLowerCase()}`}>
+                            <div
+                              className={`q-level level-${q.level.toLowerCase()}`}
+                            >
                               {q.level}
                             </div>
 
@@ -236,7 +248,9 @@ const MarginComponent = () => {
                               <p className="answer-text">{q.answer}</p>
                             </div>
                             <button
-                              className={`q-cta ${openAnswers.has(q.id!) ? "open" : ""}`}
+                              className={`q-cta ${
+                                openAnswers.has(q.id!) ? "open" : ""
+                              }`}
                               onClick={() => toggleAnswer(q.id!)}
                             >
                               {openAnswers.has(q.id!)
@@ -247,7 +261,13 @@ const MarginComponent = () => {
                           </div>
                         ))
                       ) : (
-                        <p style={{ padding: 20, textAlign: "center", color: "#888" }}>
+                        <p
+                          style={{
+                            padding: 20,
+                            textAlign: "center",
+                            color: "#888",
+                          }}
+                        >
                           Chưa có câu hỏi nào cho bộ lọc này.
                         </p>
                       )}
@@ -255,22 +275,33 @@ const MarginComponent = () => {
                     <div className="summary-exercise">
                       <h3 className="summary-title">Làm bài tập tổng kết:</h3>
                       <p className="summary-desc">
-                        Hãy hoàn thành bài tập tổng kết dưới đây để kiểm tra kiến thức
-                        của bạn!
+                        Hãy hoàn thành bài tập tổng kết dưới đây để kiểm tra
+                        kiến thức của bạn!
                       </p>
-                      <button className="summary-btn" onClick={handleStudyClick}>
+                      <button
+                        className="summary-btn"
+                        onClick={handleStudyClick}
+                      >
                         Làm bài tổng kết
                       </button>
                     </div>
                   </div>
                 ) : (
-                  <div style={{ textAlign: "center", padding: "50px", color: "#888" }}>
+                  <div
+                    style={{
+                      textAlign: "center",
+                      padding: "50px",
+                      color: "#888",
+                    }}
+                  >
                     Chọn một phần để xem câu hỏi.
                   </div>
                 )}
               </>
             ) : (
-              <div style={{ textAlign: "center", padding: "50px", color: "#888" }}>
+              <div
+                style={{ textAlign: "center", padding: "50px", color: "#888" }}
+              >
                 Chưa có dữ liệu cho thị trường này.
               </div>
             )}

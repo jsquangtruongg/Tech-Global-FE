@@ -1,0 +1,127 @@
+.bot-trade-wrapper {
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  padding-top: 80px;
+  padding-bottom: 50px;
+}
+
+.bot-trade-container {
+  width: 1200px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.bot-trade-header {
+  background: #fff;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
+  margin-bottom: 26px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.bt-header-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.bt-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.bt-subtitle {
+  color: #6b7280;
+  margin-top: 6px;
+}
+
+.bot-card {
+  border-radius: 12px;
+}
+
+.bot-card .ant-rate {
+  font-size: 16px;
+}
+
+.bot-card-cover {
+  height: 220px;
+  object-fit: cover;
+  width: 100%;
+}
+
+.bot-card-cover-bg {
+  height: 200px;
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.bot-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.bot-card-title {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.bot-card-subtitle {
+  color: #6b7280;
+  margin-bottom: 12px;
+}
+
+.bot-card-tags {
+  margin-bottom: 12px;
+}
+
+.bot-card-features {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.bot-card-price {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bot-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: #f59e0b;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 999px;
+  box-shadow: 0 2px 6px rgba(245, 158, 11, 0.35);
+}
+
+.price-left {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.price-value {
+  font-size: 24px;
+  font-weight: 800;
+  color: #1d3571;
+}
+
+.price-unit {
+  color: #6b7280;
+}

@@ -70,6 +70,10 @@ const NavBarLayout = () => {
           key: "/admin/interview",
           label: "Phỏng vấn",
         },
+        {
+          key: "/admin/study",
+          label: "Quản lý câu hỏi bài tập",
+        },
       ],
     },
     {

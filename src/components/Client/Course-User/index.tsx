@@ -64,7 +64,9 @@ const CourseUserComponent = () => {
     navigate(`/payment/${id}`);
     message.info("Chuyển đến trang thanh toán...");
   };
-
+const handleCourseStudy = (id: number) => {
+    navigate(`/course-study/${id}`);
+  };
   const handleRemoveFromWishlist = async (
     courseId: number,
     e: React.MouseEvent
@@ -101,9 +103,9 @@ const CourseUserComponent = () => {
       <div
         key={course.id}
         className="course-card"
-        onClick={() => navigate(`/course-detail/${course.id}`)}
+      //  onClick={() => navigate(`/course-detail/${course.id}`)}
       >
-        <div className="card-image-wrapper">
+        <div className="card-image-wrapper"> 
           <img
             src={
               course.image ||
@@ -144,7 +146,7 @@ const CourseUserComponent = () => {
                   className="action-btn btn-start"
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleContinueLearning(course.id!);
+                    handleCourseStudy(course.id!);
                   }}
                 >
                   {progress > 0 ? "Tiếp tục học" : "Bắt đầu học"}

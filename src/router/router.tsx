@@ -26,6 +26,9 @@ import AnalyticsNewUserPage from "../page/Admin/AnalyticsNewUser";
 import BlogDetailPage from "../page/Client/Blog-Detail";
 import CourseUserPage from "../page/Client/Course-User";
 import InterviewAdminPage from "../page/Admin/Interview";
+import CourseStudyPage from "../page/Client/Course-Study";
+import StudyAdminPage from "../page/Admin/Study";
+import BotTradePage from "../page/Bot-Trade";
 const router = createBrowserRouter([
   {
     element: <HeaderLayout />,
@@ -83,8 +86,17 @@ const router = createBrowserRouter([
         element: <CourseUserPage />,
         path: "/course-user",
       },
+      {
+        element: <BotTradePage />,
+        path: "/bot-trade",
+      },
+      {
+        element: <CourseStudyPage />,
+        path: "/course-study/:id",
+      },
     ],
   },
+
   {
     element: <AuthLayout />,
     path: "/",
@@ -158,6 +170,10 @@ const router = createBrowserRouter([
       {
         element: <InterviewAdminPage />,
         path: "interview",
+      },
+      {
+        element: <StudyAdminPage />,
+        path: "study",
       },
     ],
   },

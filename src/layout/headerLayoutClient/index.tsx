@@ -106,6 +106,9 @@ const HeaderLayout = () => {
   const handleClickRegister = () => {
     navigate("/register");
   };
+  const handleClickBotTrade = () => {
+    navigate("/bot-trade");
+  };
   return (
     <>
       <div className="header-layout">
@@ -158,7 +161,10 @@ const HeaderLayout = () => {
                     </div>
                     <div className="features-section">
                       <p className="section-title">Nâng cao</p>
-                      <div className="feature-item">
+                      <div
+                        className="feature-item"
+                        onClick={handleClickBotTrade}
+                      >
                         <SmartToyOutlinedIcon className="feature-icon" />
                         <div className="feature-text">
                           <p className="feature-title">Bot giao dịch</p>

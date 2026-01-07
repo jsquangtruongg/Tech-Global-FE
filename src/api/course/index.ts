@@ -5,6 +5,7 @@ export interface ILesson {
   title: string;
   duration: string;
   preview: boolean;
+  video_url?: string;
 }
 
 export interface ISection {
