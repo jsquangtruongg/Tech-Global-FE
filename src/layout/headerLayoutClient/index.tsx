@@ -70,12 +70,17 @@ const HeaderLayout = () => {
       icon: <BookOutlined />,
       onClick: () => navigate("/course-user"),
     },
-    {
-      key: "5",
-      label: "Admin & Quản lý",
-      icon: <ApiOutlined />,
-      onClick: () => navigate("/admin/dashboard"),
-    },
+    ...(user?.userData?.roleData?.code === "R1" ||
+    user?.userData?.roleData?.code === "R2"
+      ? [
+          {
+            key: "5",
+            label: "Admin & Quản lý",
+            icon: <ApiOutlined />,
+            onClick: () => navigate("/admin/dashboard"),
+          },
+        ]
+      : []),
     {
       type: "divider",
     },

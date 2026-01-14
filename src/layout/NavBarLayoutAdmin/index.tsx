@@ -67,6 +67,11 @@ const NavBarLayout = () => {
           label: "Khóa học",
         },
         {
+          key: "/admin/bot-products",
+          label: "Bot sản phẩm",
+        },
+
+        {
           key: "/admin/interview",
           label: "Phỏng vấn",
         },

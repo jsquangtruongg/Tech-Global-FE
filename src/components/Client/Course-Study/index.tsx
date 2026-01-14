@@ -173,7 +173,7 @@ const CourseStudyComponent = () => {
         </div>
       </Header>
       <Layout hasSider>
-        <Content className="study-content">
+        <Content className="study-content-container">
           {currentLesson ? (
             <>
               <div className="video-container-fluid">

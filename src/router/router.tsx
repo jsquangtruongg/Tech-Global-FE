@@ -29,6 +29,8 @@ import InterviewAdminPage from "../page/Admin/Interview";
 import CourseStudyPage from "../page/Client/Course-Study";
 import StudyAdminPage from "../page/Admin/Study";
 import BotTradePage from "../page/Bot-Trade";
+import BuyBotPage from "../page/Client/Buy-Bot";
+import BotTradeProductAdminPage from "../page/Admin/Bot-Trade-Product";
 const router = createBrowserRouter([
   {
     element: <HeaderLayout />,
@@ -93,6 +95,10 @@ const router = createBrowserRouter([
       {
         element: <CourseStudyPage />,
         path: "/course-study/:id",
+      },
+      {
+        element: <BuyBotPage />,
+        path: "/buy-bot",
       },
     ],
   },
@@ -174,6 +180,10 @@ const router = createBrowserRouter([
       {
         element: <StudyAdminPage />,
         path: "study",
+      },
+      {
+        element: <BotTradeProductAdminPage />,
+        path: "bot-products",
       },
     ],
   },

@@ -36,6 +36,7 @@ import {
   deleteCourseAPI,
   type ICourse,
   type ISection,
+  uploadCourseImageAPI,
 } from "../../../api/course";
 import "./style.scss";
 import { getAllUsersAPI } from "../../../api/user";
@@ -55,6 +56,8 @@ const CourseAdminComponent = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const [instructors, setInstructors] = useState<any[]>([]);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [form] = Form.useForm();
 
   const fetchCourses = async () => {
@@ -111,14 +114,45 @@ const CourseAdminComponent = () => {
   const handleAdd = () => {
     setEditingCourse(null);
     form.resetFields();
-    form.setFieldsValue({ sections: [] });
+    form.setFieldsValue({
+      sections: [],
+      image: undefined,
+      imageUpload: undefined,
+    });
+    setPreviewImage(null);
     setIsModalOpen(true);
   };
 
   const handleEdit = (record: ICourse) => {
     setEditingCourse(record);
     form.setFieldsValue(record);
+    setPreviewImage(record.image || null);
     setIsModalOpen(true);
+  };
+
+  const handleUploadImage = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    setUploadingImage(true);
+    try {
+      const res = await uploadCourseImageAPI(file);
+      if (res.err === 0 && res.data?.url) {
+        form.setFieldsValue({
+          image: res.data.url,
+          imageUpload: res.data.url,
+        });
+        await form.validateFields(["imageUpload"]);
+        setPreviewImage(res.data.url);
+        message.success("Upload ảnh khóa học thành công");
+      } else {
+        message.error(res.mes || "Upload ảnh khóa học thất bại");
+      }
+    } catch (error) {
+      message.error("Upload ảnh khóa học thất bại");
+    }
+    setUploadingImage(false);
   };
 
   const handleDelete = async (id: number) => {
@@ -351,14 +385,43 @@ const CourseAdminComponent = () => {
         </Col>
       </Row>
 
+      <Form.Item name="image" hidden>
+        <Input />
+      </Form.Item>
+
       <Row gutter={16}>
         <Col span={12}>
           <Form.Item
-            name="image"
-            label="Link hình ảnh (Thumbnail)"
-            rules={[{ required: true, message: "Nhập link ảnh" }]}
+            label="Ảnh khóa học"
+            name="imageUpload"
+            required
+            rules={[
+              {
+                validator: async () => {
+                  const image = form.getFieldValue("image");
+                  if (!image) {
+                    throw new Error("Vui lòng upload hình ảnh!");
+                  }
+                },
+              },
+            ]}
           >
-            <Input placeholder="https://..." />
+            <Space direction="vertical" style={{ width: "100%" }}>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleUploadImage}
+                disabled={uploadingImage}
+              />
+              {uploadingImage && <span>Đang upload ảnh...</span>}
+              {previewImage && (
+                <Image
+                  src={previewImage}
+                  width={200}
+                  style={{ marginTop: 8, borderRadius: 4 }}
+                />
+              )}
+            </Space>
           </Form.Item>
         </Col>
         <Col span={12}>

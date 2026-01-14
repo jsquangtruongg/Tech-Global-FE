@@ -245,6 +245,7 @@
         }
       }
       .txt-business-desc {
+        margin-left: 50px;
         text-align: center;
         font-size: 15px;
         line-height: 1.5;
@@ -412,6 +413,7 @@
         }
 
         .blog-content {
+          cursor: pointer;
           position: absolute;
           bottom: 10px;
           width: 85%;
@@ -424,6 +426,7 @@
           flex-direction: column;
           align-items: center;
           justify-content: center;
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
 
           .txt-blog-title {
             font-size: 15px;
@@ -439,7 +442,7 @@
             justify-content: center;
             color: #4aaf52;
             cursor: pointer;
-
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
             .txt-more {
               font-weight: 600;
               margin: 0 5px 0 0;
@@ -448,7 +451,15 @@
             }
             .icon-more {
               font-size: 20px;
+              transition: transform 0.2s ease;
             }
+          }
+          &:hover {
+            transform: translateY(-4px) scale(1.01);
+            box-shadow: 0 8px 22px rgba(135, 175, 203, 0.75);
+          }
+          &:hover .icon-more {
+            transform: translateX(4px);
           }
         }
       }

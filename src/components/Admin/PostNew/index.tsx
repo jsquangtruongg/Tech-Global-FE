@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   Button,
@@ -26,6 +26,7 @@ import {
   createPostAPI,
   updatePostAPI,
   deletePostAPI,
+  uploadPostImageAPI,
   type IPost,
 } from "../../../api/post";
 import "./style.scss";
@@ -43,6 +44,8 @@ const PostNewAdminComponent = () => {
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [searchInput, setSearchInput] = useState("");
   const [isSearching, setIsSearching] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [form] = Form.useForm();
 
   const fetchPosts = async () => {
@@ -84,13 +87,40 @@ const PostNewAdminComponent = () => {
   const handleAdd = () => {
     setEditingPost(null);
     form.resetFields();
+    setPreviewImage(null);
     setIsModalOpen(true);
   };
 
   const handleEdit = (record: IPost) => {
     setEditingPost(record);
     form.setFieldsValue(record);
+    setPreviewImage(record.image || null);
     setIsModalOpen(true);
+  };
+
+  const handleUploadImage = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    setUploadingImage(true);
+    try {
+      const res = await uploadPostImageAPI(file);
+      if (res.err === 0 && res.data?.url) {
+        form.setFieldsValue({
+          image: res.data.url,
+          imageUpload: res.data.url,
+        });
+        await form.validateFields(["imageUpload"]);
+        setPreviewImage(res.data.url);
+        message.success("Upload ảnh thành công");
+      } else {
+        message.error(res.mes || "Upload ảnh thất bại");
+      }
+    } catch (error) {
+      message.error("Upload ảnh thất bại");
+    }
+    setUploadingImage(false);
   };
 
   const handleDelete = async (id: number) => {
@@ -345,14 +375,41 @@ const PostNewAdminComponent = () => {
             </Form.Item>
           </div>
 
+          <Form.Item name="image" hidden>
+            <Input />
+          </Form.Item>
+
           <Form.Item
-            name="image"
-            label="Link hình ảnh"
+            label="Ảnh bài viết"
+            name="imageUpload"
+            required
             rules={[
-              { required: true, message: "Vui lòng nhập link hình ảnh!" },
+              {
+                validator: async () => {
+                  const image = form.getFieldValue("image");
+                  if (!image) {
+                    throw new Error("Vui lòng upload hình ảnh!");
+                  }
+                },
+              },
             ]}
           >
-            <Input placeholder="URL hình ảnh" />
+            <Space direction="vertical" style={{ width: "100%" }}>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleUploadImage}
+                disabled={uploadingImage}
+              />
+              {uploadingImage && <span>Đang upload ảnh...</span>}
+              {previewImage && (
+                <Image
+                  src={previewImage}
+                  width={200}
+                  style={{ marginTop: 8, borderRadius: 4 }}
+                />
+              )}
+            </Space>
           </Form.Item>
 
           <Form.Item

@@ -1,5 +1,5 @@
 .course-study-layout {
-  height: 100vh;
+  height: 100%;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
 
@@ -74,13 +74,14 @@
     }
   }
 
-  .study-content {
+  .study-content-container {
     background: #f9f9f9; /* Light gray background like YouTube */
     overflow-y: auto;
     padding: 24px;
     display: flex;
     flex-direction: column;
     align-items: flex-start; /* Align left */
+    margin-bottom: 24px;
 
     .video-container-fluid {
       width: 100%;
