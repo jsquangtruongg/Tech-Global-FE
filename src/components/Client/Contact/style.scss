@@ -1,0 +1,67 @@
+.client-contact-container {
+  padding: 40px 80px;
+  background-color: #f6f7fb;
+
+  .client-contact-hero {
+    margin-bottom: 24px;
+    .client-contact-hero__content {
+      max-width: 720px;
+      h2 {
+        font-family: "Inter", sans-serif;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+      p {
+        color: #6b7280;
+        font-size: 14px;
+      }
+      .client-contact-hero__highlights {
+        margin-top: 12px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        span {
+          font-size: 13px;
+          background-color: #e5f5eb;
+          color: #166534;
+          padding: 4px 10px;
+          border-radius: 999px;
+        }
+      }
+    }
+  }
+
+  .ant-card {
+    border-radius: 16px;
+  }
+
+  .client-contact-form__footer {
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  .client-contact-info-item {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .client-contact-info-icon {
+    font-size: 24px;
+    color: #4aaf52;
+    margin-top: 4px;
+  }
+
+  .client-contact-list {
+    padding-left: 18px;
+    margin: 0;
+    li {
+      font-size: 13px;
+      color: #4b5563;
+    }
+  }
+}

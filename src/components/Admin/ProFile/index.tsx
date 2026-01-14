@@ -34,7 +34,8 @@ const ProfileAdminComponent = () => {
       if (res.err === 0) {
         setUser(res.userData);
         form.setFieldsValue({
-          name: res.userData.name,
+          firstName: (res.userData as any)?.firstName,
+          lastName: (res.userData as any)?.lastName,
           email: res.userData.email,
           phone: res.userData.phone,
           avatar: res.userData.avatar,
@@ -118,7 +119,11 @@ const ProfileAdminComponent = () => {
               src={user?.avatar}
               className="mb-4"
             />
-            <h3 style={{ marginTop: 16, marginBottom: 4 }}>{user?.name}</h3>
+            <h3 style={{ marginTop: 16, marginBottom: 4 }}>
+              {[(user as any)?.lastName, (user as any)?.firstName]
+                .filter(Boolean)
+                .join(" ")}
+            </h3>
             <span className="user-role-tag">{user?.role || "Admin"}</span>
 
             <div style={{ marginTop: 20, width: "100%", padding: "0 20px" }}>
@@ -152,25 +157,37 @@ const ProfileAdminComponent = () => {
               layout="vertical"
               onFinish={onFinish}
               initialValues={{
-                name: user?.name,
+                firstName: (user as any)?.firstName,
+                lastName: (user as any)?.lastName,
                 email: user?.email,
                 phone: user?.phone,
                 avatar: user?.avatar,
               }}
             >
               <Row gutter={16}>
-                <Col span={24}>
+                <Col span={12}>
                   <Form.Item
-                    name="name"
-                    label="Họ và tên"
-                    rules={[
-                      { required: true, message: "Vui lòng nhập họ tên" },
-                    ]}
+                    name="lastName"
+                    label="Họ"
+                    rules={[{ required: true, message: "Vui lòng nhập họ" }]}
                   >
                     <Input
                       size="large"
                       prefix={<UserOutlined />}
-                      placeholder="Nhập họ và tên"
+                      placeholder="Nhập họ"
+                    />
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item
+                    name="firstName"
+                    label="Tên"
+                    rules={[{ required: true, message: "Vui lòng nhập tên" }]}
+                  >
+                    <Input
+                      size="large"
+                      prefix={<UserOutlined />}
+                      placeholder="Nhập tên"
                     />
                   </Form.Item>
                 </Col>

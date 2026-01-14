@@ -437,7 +437,8 @@ const CourseAdminComponent = () => {
             >
               {instructors.map((user) => (
                 <Option key={user.id} value={user.id}>
-                  {user.name} ({user.email})
+                  {[user?.lastName, user?.firstName].filter(Boolean).join(" ")}{" "}
+                  ({user.email})
                 </Option>
               ))}
             </Select>

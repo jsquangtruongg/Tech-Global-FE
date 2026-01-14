@@ -213,7 +213,9 @@ const PostNewAdminComponent = () => {
       title: "Tác giả",
       dataIndex: "authorData",
       key: "authorData",
-      render: (authorData: any) => authorData?.name || "Unknown",
+      render: (authorData: any) =>
+        [authorData?.lastName, authorData?.firstName].filter(Boolean).join(" ") ||
+        "Unknown",
     },
     {
       title: "Trạng thái",

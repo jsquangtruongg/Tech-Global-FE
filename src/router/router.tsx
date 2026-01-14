@@ -31,6 +31,9 @@ import StudyAdminPage from "../page/Admin/Study";
 import BotTradePage from "../page/Bot-Trade";
 import BuyBotPage from "../page/Client/Buy-Bot";
 import BotTradeProductAdminPage from "../page/Admin/Bot-Trade-Product";
+import ProfileClientPage from "../page/Auth/Profile";
+import SettingClientPage from "../page/Client/Setting";
+import ContactClientPage from "../page/Client/Contact";
 const router = createBrowserRouter([
   {
     element: <HeaderLayout />,
@@ -99,6 +102,18 @@ const router = createBrowserRouter([
       {
         element: <BuyBotPage />,
         path: "/buy-bot",
+      },
+      {
+        element: <ProfileClientPage />,
+        path: "/profile",
+      },
+      {
+        element: <SettingClientPage />,
+        path: "/setting",
+      },
+      {
+        element: <ContactClientPage />,
+        path: "/contact",
       },
     ],
   },
