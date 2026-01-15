@@ -87,7 +87,6 @@
     }
 
     &.active {
-      background: linear-gradient(180deg, #eafef1 0%, #dffbe9 100%);
       border-color: #bfe9ce;
       .q-num {
         background-color: #4aaf52;
@@ -156,6 +155,21 @@
       flex: 1;
     }
   }
+}
+
+.theme-dark .study-sidebar .q-nav-item.active {
+  background-color: #000000 !important;
+  border-color: #4aaf52;
+}
+
+.theme-dark .study-sidebar .q-nav-item.active .q-num {
+  background-color: #15803d;
+  color: #f9fafb;
+}
+
+.theme-dark .study-sidebar .q-nav-item.active .q-preview {
+  color: #f9fafb !important;
+  font-weight: 600;
 }
 
 // Content Area
@@ -227,11 +241,6 @@
         cursor: pointer;
         transition: all 0.2s;
         background-color: #fff;
-
-        &:hover:not(.correct):not(.wrong) {
-          border-color: #bfe9ce;
-          background-color: #f9fffb;
-        }
 
         &.selected {
           border-color: #4aaf52;

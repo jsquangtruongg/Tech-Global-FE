@@ -238,7 +238,7 @@ const ProfileClientComponent = () => {
               </Col>
               <Col flex="auto">
                 <h4 style={{ margin: 0 }}>{item.title}</h4>
-                <div style={{ color: "#888", fontSize: 13 }}>
+                <div className="client-profile-text-secondary">
                   Giảng viên: {item.instructor}
                 </div>
                 <div style={{ marginTop: 8 }}>
@@ -248,11 +248,10 @@ const ProfileClientComponent = () => {
               <Col>
                 <Button type="primary">Tiếp tục học</Button>
                 <div
+                  className="client-profile-text-meta"
                   style={{
                     marginTop: 8,
                     textAlign: "center",
-                    fontSize: 12,
-                    color: "#888",
                   }}
                 >
                   Truy cập: {item.lastAccess}
@@ -397,11 +396,11 @@ const ProfileClientComponent = () => {
               <h3 style={{ marginTop: 12, marginBottom: 4 }}>
                 {fullName || "Người dùng"}
               </h3>
-              <div style={{ color: "#666", marginBottom: 8 }}>
+              <div className="client-profile-text-muted" style={{ marginBottom: 8 }}>
                 <MailOutlined />{" "}
                 <span style={{ marginLeft: 6 }}>{user?.email}</span>
               </div>
-              <div style={{ color: "#666" }}>
+              <div className="client-profile-text-muted">
                 <PhoneOutlined />{" "}
                 <span style={{ marginLeft: 6 }}>
                   {user?.phone || "Chưa cập nhật"}

@@ -80,7 +80,7 @@ const HeaderLayoutAdmin = () => {
           
           <div className="header-container__right">
             <div className="header-icon" style={{ cursor: "pointer", marginRight: "10px" }}>
-              <BellOutlined style={{ fontSize: "20px", color: "#5f6368" }} />
+              <BellOutlined style={{ fontSize: 20 }} />
             </div>
             
             <Dropdown menu={{ items }} trigger={["click"]}>

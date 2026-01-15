@@ -38,6 +38,7 @@
   .footer-content {
     background-color: #1f2a30;
     color: #f5f5f5;
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
     display: flex;
     justify-content: center;
     padding: 40px 100px;
@@ -133,4 +134,48 @@
       }
     }
   }
+}
+
+.theme-dark .footer-layout {
+  background-color: #020617;
+}
+
+.theme-dark .footer-layout .footer-cta .cta-title {
+  color: #e5e7eb;
+}
+
+.theme-dark .footer-layout .footer-content {
+  background-color: #020617;
+  color: #e5e7eb;
+}
+
+.theme-dark .footer-layout .footer-content .brand-copy,
+.theme-dark .footer-layout .footer-content .link-item,
+.theme-dark .footer-layout .footer-content .social-icon {
+  color: #9ca3af;
+}
+
+.theme-dark .footer-layout .footer-content .newsletter .link-title {
+  color: #e5e7eb;
+}
+
+.theme-dark .footer-layout .footer-content .input-email {
+  background-color: #020617;
+  border: 1px solid #1f2937;
+}
+
+.theme-dark .footer-layout .footer-content .input-email input {
+  color: #e5e7eb;
+}
+
+.theme-dark .footer-layout .footer-content .input-email input::placeholder {
+  color: #6b7280;
+}
+
+.theme-dark .footer-layout {
+  background-color: #020617;
+}
+
+.theme-dark .footer-layout .footer-cta .cta-title {
+  color: #e5e7eb;
 }
