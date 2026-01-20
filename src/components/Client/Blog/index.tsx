@@ -18,13 +18,14 @@ const BlogComponent = () => {
       try {
         const res = await getAllPostsAPI({ limit: "all" });
         if (res.err === 0 && res.data) {
-          // Sort by newest first
-          const sortedPosts = Array.isArray(res.data)
-            ? res.data.sort(
-                (a: IPost, b: IPost) =>
-                  dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf()
-              )
-            : [];
+          const rawPosts = Array.isArray(res.data) ? res.data : [];
+          const publishedPosts = rawPosts.filter(
+            (p: IPost) => (p.status || "").toLowerCase() === "published"
+          );
+          const sortedPosts = publishedPosts.sort(
+            (a: IPost, b: IPost) =>
+              dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf()
+          );
           setPosts(sortedPosts);
         }
       } catch (error) {

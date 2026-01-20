@@ -194,12 +194,8 @@ const BotTradeAdminComponent = () => {
       key: "name",
       render: (text: string, record: IBotProduct) => (
         <div>
-          <b>{text}</b>
-          {record.is_popular && (
-            <Tag color="orange" style={{ marginLeft: 5 }}>
-              Hot
-            </Tag>
-          )}
+          <p>{text}</p>
+         
         </div>
       ),
     },

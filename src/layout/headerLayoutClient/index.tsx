@@ -41,10 +41,10 @@ const HeaderLayout = () => {
       key: "1",
       label: (
         <div style={{ padding: "4px 0" }}>
-          <p style={{ fontWeight: "bold", margin: 0 }}>
+          <p style={{ fontWeight: "bold", margin: 0, color: "#e5e7eb" }}>
             {user?.userData?.name || user?.name || "User"}
           </p>
-          <p style={{ fontSize: "12px", color: "#666", margin: 0 }}>
+          <p style={{ fontSize: "12px", color: "#9ca3af", margin: 0 }}>
             {user?.userData?.email || user?.email}
           </p>
         </div>
