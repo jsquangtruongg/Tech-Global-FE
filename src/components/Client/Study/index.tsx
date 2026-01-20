@@ -352,17 +352,26 @@ const StudyComponent = () => {
                   {currentQuestion.media && (
                     <div className="media-container">
                       {currentQuestion.media.type === "image" ? (
-                        <img
-                          src={currentQuestion.media.url}
-                          alt="Case Study"
-                          className="media-item"
-                        />
+                        <>
+                         
+                          <img
+                            src={currentQuestion.media.url}
+                            alt="Case Study"
+                            className="media-item"
+                          />
+                        </>
                       ) : (
-                        <video
-                          src={currentQuestion.media.url}
-                          controls
-                          className="media-item"
-                        />
+                        <>
+                          <Tag color="purple">Video</Tag>
+                          <video
+                            src={currentQuestion.media.url}
+                            controls
+                            className="media-item"
+                            onError={(e) => {
+                              message.warning("Không thể tải video");
+                            }}
+                          />
+                        </>
                       )}
                     </div>
                   )}

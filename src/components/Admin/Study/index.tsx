@@ -16,6 +16,7 @@ import {
   Row,
   Col,
   Segmented,
+  Image,
 } from "antd";
 import {
   PlusOutlined,
@@ -39,6 +40,7 @@ import {
   createStudyAPI,
   updateStudyAPI,
   deleteStudyAPI,
+  uploadStudyMediaAPI,
 } from "../../../api/study";
 
 interface IOption {
@@ -100,6 +102,9 @@ const StudyAdminComponent = () => {
   const [form] = Form.useForm();
   const questionType = Form.useWatch("type", form);
   const correctOptionIndex = Form.useWatch("correctOptionIndex", form);
+  const mediaType = Form.useWatch("media_type", form);
+  const [uploadingMedia, setUploadingMedia] = useState(false);
+  const [previewMedia, setPreviewMedia] = useState<string | null>(null);
 
   useEffect(() => {
     fetchTopics();
@@ -244,6 +249,7 @@ const StudyAdminComponent = () => {
       media_url: record.media?.url,
       correctOptionIndex: correctIdx,
     });
+    setPreviewMedia(record.media?.url || null);
     setIsModalOpen(true);
   };
 
@@ -335,6 +341,28 @@ const StudyAdminComponent = () => {
     } catch (error) {
       message.error("Đã có lỗi xảy ra");
     }
+  };
+
+  const handleUploadMedia = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    setUploadingMedia(true);
+    try {
+      const res = await uploadStudyMediaAPI(file);
+      if (res.err === 0 && res.data?.url) {
+        form.setFieldsValue({ media_url: res.data.url });
+        setPreviewMedia(res.data.url);
+        await form.validateFields(["mediaUpload"]);
+        message.success("Upload ảnh thành công");
+      } else {
+        message.error(res.mess || "Upload ảnh thất bại");
+      }
+    } catch (error) {
+      message.error("Upload ảnh thất bại");
+    }
+    setUploadingMedia(false);
   };
 
   const columns = [
@@ -523,7 +551,6 @@ const StudyAdminComponent = () => {
               <Radio value="case-study">Case Study</Radio>
             </Radio.Group>
           </Form.Item>
-
           <Form.Item
             label="Nội dung câu hỏi / Đề bài"
             name="content"
@@ -533,8 +560,6 @@ const StudyAdminComponent = () => {
           >
             <Input.TextArea rows={4} placeholder="Nhập nội dung câu hỏi..." />
           </Form.Item>
-
-          {/* Logic cho Trắc nghiệm */}
           {questionType === "multiple-choice" && (
             <div className="options-container">
               <Form.Item name="correctOptionIndex" hidden>
@@ -601,8 +626,6 @@ const StudyAdminComponent = () => {
               </Form.List>
             </div>
           )}
-
-          {/* Logic cho Case Study */}
           {questionType === "case-study" && (
             <div className="media-container">
               <Divider orientation="left">Media (Hình ảnh / Video)</Divider>
@@ -624,9 +647,48 @@ const StudyAdminComponent = () => {
                   </Form.Item>
                 </Col>
                 <Col span={16}>
-                  <Form.Item name="media_url" label="URL Media">
-                    <Input placeholder="https://example.com/image.png" />
-                  </Form.Item>
+                  {mediaType === "image" ? (
+                    <>
+                      <Form.Item name="media_url" hidden>
+                        <Input />
+                      </Form.Item>
+                      <Form.Item
+                        label="Upload ảnh"
+                        name="mediaUpload"
+                        rules={[
+                          {
+                            validator: async () => {
+                              const url = form.getFieldValue("media_url");
+                              if (!url) {
+                                throw new Error("Vui lòng upload hình ảnh!");
+                              }
+                            },
+                          },
+                        ]}
+                      >
+                        <Space direction="vertical" style={{ width: "100%" }}>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleUploadMedia}
+                            disabled={uploadingMedia}
+                          />
+                          {uploadingMedia && <span>Đang upload ảnh...</span>}
+                          {previewMedia && (
+                            <Image
+                              src={previewMedia}
+                              width={200}
+                              style={{ marginTop: 8, borderRadius: 4 }}
+                            />
+                          )}
+                        </Space>
+                      </Form.Item>
+                    </>
+                  ) : (
+                    <Form.Item name="media_url" label="URL Media">
+                      <Input placeholder="https://example.com/video.mp4" />
+                    </Form.Item>
+                  )}
                 </Col>
               </Row>
             </div>

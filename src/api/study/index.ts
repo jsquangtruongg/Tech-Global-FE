@@ -66,3 +66,28 @@ export const deleteStudyAPI = async (id: number): Promise<IResponse> => {
     return { err: 1, mess: "Lỗi khi xóa bài tập" };
   }
 };
+
+export const uploadStudyMediaAPI = async (file: File): Promise<IResponse> => {
+  try {
+    const formData = new FormData();
+    formData.append("image", file);
+    const { data } = await API.post("/study/upload-media", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return {
+      err: data.err,
+      mess: data.mes || data.mess,
+      data: data.data,
+    };
+  } catch (error: any) {
+    const backendMessage =
+      error?.response?.data?.mes ||
+      error?.response?.data?.mess ||
+      error?.message;
+    return {
+      err: 1,
+      mess: backendMessage || "Lỗi khi upload media",
+      data: null,
+    };
+  }
+};

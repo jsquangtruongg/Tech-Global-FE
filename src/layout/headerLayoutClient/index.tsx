@@ -119,6 +119,12 @@ const HeaderLayout = () => {
   const handleClickContact = () => {
     navigate("/contact");
   };
+  const handleClickFund = () => {
+    navigate("/fund");
+  };
+  const handleClickTraderDNA = () => {
+    navigate("/trader-dna");
+  };
   return (
     <>
       <div className="header-layout">
@@ -168,6 +174,18 @@ const HeaderLayout = () => {
                           </p>
                         </div>
                       </div>
+                      <div
+                        className="feature-item"
+                        onClick={handleClickTraderDNA}
+                      >
+                        <TrendingUpOutlinedIcon className="feature-icon" />
+                        <div className="feature-text">
+                          <p className="feature-title">Trader DNA</p>
+                          <p className="feature-desc">
+                            Trắc nghiệm tính cách & chiến lược giao dịch
+                          </p>
+                        </div>
+                      </div>
                     </div>
                     <div className="features-section">
                       <p className="section-title">Nâng cao</p>
@@ -183,12 +201,12 @@ const HeaderLayout = () => {
                           </p>
                         </div>
                       </div>
-                      <div className="feature-item">
+                      <div className="feature-item" onClick={handleClickFund}>
                         <ContentCopyOutlinedIcon className="feature-icon" />
                         <div className="feature-text">
-                          <p className="feature-title">Sao chép giao dịch</p>
+                          <p className="feature-title">Quỹ Giao Dịch Uy Tín</p>
                           <p className="feature-desc">
-                            Theo dõi các giao dịch nổi tiếng nhất
+                            Cách dễ nhất để giao dịch ở mọi thời điểm
                           </p>
                         </div>
                       </div>

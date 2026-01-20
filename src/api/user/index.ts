@@ -5,7 +5,7 @@ export interface IUser {
   email: string;
   firstName: string;
   lastName: string;
-  role: "admin" | "staff" | "customer"; // Adjust roles as per system convention
+  role: "admin" | "staff" | "customer";
   phone?: string;
   status?: "active" | "inactive" | "banned";
   avatar?: string;
@@ -14,7 +14,7 @@ export interface IUser {
 
 export interface IResponse {
   mes: string;
-  userData: any; // standardized to match existing code, but logically should be 'data' for list
+  userData: any;
   err: number;
 }
 

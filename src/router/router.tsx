@@ -34,6 +34,8 @@ import BotTradeProductAdminPage from "../page/Admin/Bot-Trade-Product";
 import ProfileClientPage from "../page/Auth/Profile";
 import SettingClientPage from "../page/Client/Setting";
 import ContactClientPage from "../page/Client/Contact";
+import FundPage from "../page/Client/Fund";
+import TraderDNAPage from "../page/Client/Trader-DNA";
 const router = createBrowserRouter([
   {
     element: <HeaderLayout />,
@@ -58,6 +60,14 @@ const router = createBrowserRouter([
       {
         element: <CoursePage />,
         path: "/course",
+      },
+      {
+        element: <FundPage />,
+        path: "/fund",
+      },
+      {
+        element: <TraderDNAPage />,
+        path: "/trader-dna",
       },
       {
         element: <CourseDetailPage />,
