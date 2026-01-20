@@ -81,7 +81,12 @@ const CourseAdminComponent = () => {
     try {
       const res = await getAllUsersAPI({ limit: "all" });
       if (res.err === 0 && Array.isArray(res.userData)) {
-        setInstructors(res.userData);
+        // Filter only users with role "staff" (R2)
+        const staffUsers = res.userData.filter((user: any) => {
+          const roleCode = user.roleData?.code || user.role_code;
+          return roleCode === "R2";
+        });
+        setInstructors(staffUsers);
       }
     } catch (error) {
       console.error("Failed to fetch instructors", error);
@@ -131,7 +136,7 @@ const CourseAdminComponent = () => {
   };
 
   const handleUploadImage = async (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -517,7 +522,7 @@ const CourseAdminComponent = () => {
                   <Form.List name={[name, "lessons"]}>
                     {(
                       lessonFields,
-                      { add: addLesson, remove: removeLesson }
+                      { add: addLesson, remove: removeLesson },
                     ) => (
                       <>
                         {lessonFields.map(
@@ -600,7 +605,7 @@ const CourseAdminComponent = () => {
                                 </Form.Item>
                               </div>
                             </div>
-                          )
+                          ),
                         )}
                         <Button
                           type="dashed"

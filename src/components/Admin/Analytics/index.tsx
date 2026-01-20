@@ -61,6 +61,42 @@ const AnalyticsAdminComponent = () => {
     { name: "Tablet", value: 5 },
   ];
 
+  const journeyData = [
+    { step: "Vào web", users: 5200, conversion: 100 },
+    { step: "Xem khóa học", users: 3600, conversion: 69 },
+    { step: "Xem bot", users: 2400, conversion: 46 },
+    { step: "Bấm mua", users: 1500, conversion: 29 },
+    { step: "Vào thanh toán", users: 1100, conversion: 21 },
+    { step: "Trả tiền", users: 780, conversion: 15 },
+    { step: "Thuê bot", users: 720, conversion: 14 },
+    { step: "Hủy mua bot", users: 120, conversion: 2 },
+    { step: "Xem bài viết", users: 1900, conversion: 37 },
+  ];
+
+  const journeyStepConversion = journeyData.slice(1).map((step, index) => {
+    const previous = journeyData[index];
+    const rate = previous.users
+      ? Math.round((step.users / previous.users) * 100)
+      : 0;
+
+    return {
+      label: `${previous.step} → ${step.step}`,
+      rate,
+    };
+  });
+
+  const totalJourneyUsers = journeyData.reduce(
+    (sum, item) => sum + item.users,
+    0
+  );
+
+  const journeyShareData = journeyData.map((item) => ({
+    step: item.step,
+    share: totalJourneyUsers
+      ? parseFloat(((item.users / totalJourneyUsers) * 100).toFixed(1))
+      : 0,
+  }));
+
   const COLORS = ["#1890ff", "#52c41a", "#faad14", "#f5222d"];
 
   // Table Columns
@@ -242,6 +278,146 @@ const AnalyticsAdminComponent = () => {
     </Card>
   );
 
+  const UserJourney = () => (
+    <>
+      <Row gutter={[24, 24]}>
+        <Col xs={24} lg={14}>
+          <Card title="Funnel hành trình người dùng" className="chart-card">
+            <div
+              style={{
+                height: 500,
+                display: "flex",
+                justifyContent: "center",
+                marginLeft: "-50px",
+              }}
+            >
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart layout="vertical" data={journeyData}>
+                  <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+                  <XAxis type="number" />
+                  <YAxis dataKey="step" type="category" width={160} />
+                  <Tooltip />
+                  <Legend />
+                  <Bar
+                    dataKey="users"
+                    name="Người dùng"
+                    fill="#1890ff"
+                    radius={[0, 4, 4, 0]}
+                    barSize={18}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </Card>
+        </Col>
+        <Col xs={24} lg={10}>
+          <Card title="Tỷ lệ chuyển đổi từng bước" className="chart-card">
+            <div style={{ height: 240 }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={journeyData} margin={{ left: -20, right: 16 }}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="step" hide />
+                  <YAxis unit="%" />
+                  <Tooltip />
+                  <Line
+                    type="monotone"
+                    dataKey="conversion"
+                    stroke="#52c41a"
+                    strokeWidth={2}
+                    dot={{ r: 3 }}
+                    name="Tỷ lệ từ đầu funnel"
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+            <Table
+              size="small"
+              pagination={false}
+              rowKey="step"
+              dataSource={journeyData}
+              columns={[
+                {
+                  title: "Bước",
+                  dataIndex: "step",
+                  key: "step",
+                  width: "40%",
+                },
+                {
+                  title: "Người dùng",
+                  dataIndex: "users",
+                  key: "users",
+                  render: (v: number) => v.toLocaleString(),
+                },
+                {
+                  title: "Tỷ lệ giữ lại",
+                  dataIndex: "conversion",
+                  key: "conversion",
+                  render: (v: number) => `${v}%`,
+                },
+              ]}
+            />
+          </Card>
+        </Col>
+      </Row>
+      <Row gutter={[24, 24]} style={{ marginTop: 24 }}>
+        <Col xs={24} lg={12}>
+          <Card
+            title="Tỷ lệ phân bổ người dùng theo bước"
+            className="chart-card"
+          >
+            <div style={{ height: 300 }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={journeyShareData}
+                    dataKey="share"
+                    nameKey="step"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={90}
+                    label
+                  >
+                    {journeyShareData.map((entry, index) => (
+                      <Cell
+                        key={`journey-share-${index}`}
+                        fill={COLORS[index % COLORS.length]}
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </Card>
+        </Col>
+        <Col xs={24} lg={12}>
+          <Card
+            title="Tỷ lệ chuyển đổi giữa từng cặp bước"
+            className="chart-card"
+          >
+            <div style={{ height: 300 }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={journeyStepConversion}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="label" />
+                  <YAxis unit="%" />
+                  <Tooltip />
+                  <Bar
+                    dataKey="rate"
+                    name="Tỷ lệ qua bước tiếp theo"
+                    fill="#faad14"
+                    barSize={20}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </Card>
+        </Col>
+      </Row>
+    </>
+  );
+
   const items = [
     {
       key: "1",
@@ -257,6 +433,11 @@ const AnalyticsAdminComponent = () => {
       key: "3",
       label: "Hiệu quả kinh doanh",
       children: <SalesAnalysis />,
+    },
+    {
+      key: "4",
+      label: "Hành trình người dùng",
+      children: <UserJourney />,
     },
   ];
 
