@@ -110,6 +110,28 @@
       }
     }
 
+    &.correct {
+      .check-icon {
+        color: #52c41a;
+        font-size: 16px;
+      }
+      .q-num {
+        background-color: #52c41a;
+        color: #fff;
+      }
+    }
+
+    &.wrong {
+      .check-icon {
+        color: #ff4d4f;
+        font-size: 16px;
+      }
+      .q-num {
+        background-color: #ff4d4f;
+        color: #fff;
+      }
+    }
+
     .q-num {
       width: 28px;
       height: 28px;

@@ -45,6 +45,34 @@ export interface IResponse {
   err: number;
 }
 
+export const uploadCourseImageAPI = async (
+  file: File
+): Promise<IResponse> => {
+  try {
+    const formData = new FormData();
+    formData.append("image", file);
+    const { data } = await API.post("/course/upload-image", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return {
+      mes: data.mes || data.mess,
+      data: data.data,
+      err: data.err,
+    };
+  } catch (error) {
+    const anyError: any = error;
+    const backendMessage =
+      anyError?.response?.data?.mes ||
+      anyError?.response?.data?.mess ||
+      anyError?.message;
+    return {
+      mes: backendMessage || "Lỗi khi upload ảnh khóa học",
+      data: null,
+      err: 1,
+    };
+  }
+};
+
 export const getAllCoursesAPI = async (params?: any): Promise<IResponse> => {
   try {
     const { data } = await API.get("/course/all", { params });

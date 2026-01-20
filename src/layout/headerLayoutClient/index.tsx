@@ -58,11 +58,13 @@ const HeaderLayout = () => {
       key: "2",
       label: "Thông tin tài khoản",
       icon: <UserOutlined />,
+      onClick: () => navigate("/profile"),
     },
     {
       key: "3",
       label: "Cài đặt",
       icon: <SettingOutlined />,
+      onClick: () => navigate("/setting"),
     },
     {
       key: "4",
@@ -70,12 +72,17 @@ const HeaderLayout = () => {
       icon: <BookOutlined />,
       onClick: () => navigate("/course-user"),
     },
-    {
-      key: "5",
-      label: "Admin & Quản lý",
-      icon: <ApiOutlined />,
-      onClick: () => navigate("/admin/dashboard"),
-    },
+    ...(user?.userData?.roleData?.code === "R1" ||
+    user?.userData?.roleData?.code === "R2"
+      ? [
+          {
+            key: "5",
+            label: "Admin & Quản lý",
+            icon: <ApiOutlined />,
+            onClick: () => navigate("/admin/dashboard"),
+          },
+        ]
+      : []),
     {
       type: "divider",
     },
@@ -108,6 +115,9 @@ const HeaderLayout = () => {
   };
   const handleClickBotTrade = () => {
     navigate("/bot-trade");
+  };
+  const handleClickContact = () => {
+    navigate("/contact");
   };
   return (
     <>
@@ -201,7 +211,10 @@ const HeaderLayout = () => {
               >
                 <p>Bài viết</p>
               </div>
-              <div className="header-layout-right__item">
+              <div
+                className="header-layout-right__item"
+                onClick={handleClickContact}
+              >
                 <p>Liên hệ</p>
               </div>
             </div>
@@ -209,7 +222,9 @@ const HeaderLayout = () => {
               <Dropdown menu={{ items }} trigger={["click"]}>
                 <div className="header-layout-user">
                   <span style={{ fontWeight: 500 }}>
-                    {user?.userData?.name || user?.name}
+                    {[user?.userData?.lastName, user?.userData?.firstName]
+                      .filter(Boolean)
+                      .join(" ")}
                   </span>
                   <Avatar
                     src={user?.userData?.avatar || user?.avatar}

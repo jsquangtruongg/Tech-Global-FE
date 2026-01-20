@@ -3,7 +3,8 @@ import { API } from "../config";
 export interface IUser {
   id?: number;
   email: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   role: "admin" | "staff" | "customer"; // Adjust roles as per system convention
   phone?: string;
   status?: "active" | "inactive" | "banned";

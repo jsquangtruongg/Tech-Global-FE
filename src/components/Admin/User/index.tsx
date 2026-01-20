@@ -62,53 +62,13 @@ const UserListAdminComponent = () => {
     pageTitle = "Quản lý Khách hàng";
   }
 
-  // Mock Data
-  const MOCK_USERS: IUser[] = [
-    {
-      id: 1,
-      name: "Nguyễn Văn Admin",
-      email: "admin@techglobal.com",
-      role: "admin",
-      status: "active",
-      phone: "0901234567",
-      createdAt: "2023-01-01",
-    },
-    {
-      id: 2,
-      name: "Trần Thị Staff",
-      email: "staff@techglobal.com",
-      role: "staff",
-      status: "active",
-      phone: "0901234568",
-      createdAt: "2023-02-15",
-    },
-    {
-      id: 3,
-      name: "Lê Văn Customer",
-      email: "customer@gmail.com",
-      role: "customer",
-      status: "active",
-      phone: "0901234569",
-      createdAt: "2023-03-20",
-    },
-    {
-      id: 4,
-      name: "Phạm Văn Banned",
-      email: "banned@gmail.com",
-      role: "customer",
-      status: "banned",
-      phone: "0901234570",
-      createdAt: "2023-04-10",
-    },
-  ];
-
   const fetchUsers = async () => {
     setLoading(true);
     try {
       const res = await getAllUsersAPI({});
       if (res.err === 0 && res.userData && res.userData.length > 0) {
         // Map backend data to frontend interface
-        const mappedUsers: IUser[] = res.userData.map((u: any) => {
+        const mappedUsers: any[] = res.userData.map((u: any) => {
           let role: "admin" | "staff" | "customer" = "customer";
           const code = u.roleData?.code || u.role_code;
           if (code === "R1") role = "admin";
@@ -116,7 +76,9 @@ const UserListAdminComponent = () => {
 
           return {
             id: u.id,
-            name: u.name,
+            firstName: u.firstName,
+            lastName: u.lastName,
+            name: [u.lastName, u.firstName].filter(Boolean).join(" "),
             email: u.email,
             role: role,
             status: u.status || "active",
@@ -153,7 +115,8 @@ const UserListAdminComponent = () => {
   const filteredUsers = users.filter((user) => {
     const matchesRole = roleFilter === "all" || user.role === roleFilter;
     const matchesSearch =
-      user.name.toLowerCase().includes(searchText.toLowerCase()) ||
+      user.firstName.toLowerCase().includes(searchText.toLowerCase()) ||
+      user.lastName.toLowerCase().includes(searchText.toLowerCase()) ||
       user.email.toLowerCase().includes(searchText.toLowerCase()) ||
       (user.phone && user.phone.includes(searchText));
     return matchesRole && matchesSearch;
@@ -171,7 +134,11 @@ const UserListAdminComponent = () => {
 
   const handleEdit = (record: IUser) => {
     setEditingUser(record);
-    form.setFieldsValue(record);
+    form.setFieldsValue({
+      ...record,
+      firstName: (record as any).firstName,
+      lastName: (record as any).lastName,
+    });
     setIsModalOpen(true);
   };
 
@@ -191,7 +158,15 @@ const UserListAdminComponent = () => {
       const values = await form.validateFields();
 
       if (editingUser) {
-        const res = await updateUserByAdminAPI(editingUser.id!, values);
+        const payload: any = {
+          firstName: values.firstName,
+          lastName: values.lastName,
+          email: values.email,
+          phone: values.phone,
+          status: values.status,
+          role: values.role,
+        };
+        const res = await updateUserByAdminAPI(editingUser.id!, payload);
         if (res.err === 0) {
           message.success("Cập nhật người dùng thành công");
           fetchUsers();
@@ -199,21 +174,38 @@ const UserListAdminComponent = () => {
           message.success("Cập nhật người dùng thành công (Mock)");
           setUsers(
             users.map((u) =>
-              u.id === editingUser.id ? { ...u, ...values } : u
+              u.id === editingUser.id
+                ? {
+                    ...u,
+                    ...payload,
+                    name: [payload.lastName, payload.firstName]
+                      .filter(Boolean)
+                      .join(" "),
+                  }
+                : u
             )
           );
         }
       } else {
-        const res = await createUserAPI(values);
+        const payload: any = {
+          name: [values.lastName, values.firstName].filter(Boolean).join(" "),
+          email: values.email,
+          password: values.password,
+          phone: values.phone,
+          role: values.role,
+          status: values.status,
+        };
+        const res = await createUserAPI(payload);
         if (res.err === 0) {
           message.success("Tạo người dùng thành công");
           fetchUsers();
         } else {
           message.success("Tạo người dùng thành công (Mock)");
           const newUser = {
-            ...values,
+            ...payload,
             id: Math.floor(Math.random() * 1000),
             createdAt: new Date().toISOString().split("T")[0],
+            name: payload.name,
           };
           setUsers([newUser, ...users]);
         }
@@ -238,7 +230,9 @@ const UserListAdminComponent = () => {
         <Space>
           <Avatar src={record.avatar} icon={<UserOutlined />} />
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <span style={{ fontWeight: 600 }}>{record.name}</span>
+            <span style={{ fontWeight: 600 }}>
+              {[record.lastName, record.firstName].filter(Boolean).join(" ")}
+            </span>
             <span style={{ fontSize: 12, color: "#888" }}>{record.email}</span>
           </div>
         </Space>
@@ -394,13 +388,25 @@ const UserListAdminComponent = () => {
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
-                name="name"
-                label="Họ và tên"
-                rules={[{ required: true, message: "Vui lòng nhập họ tên!" }]}
+                name="lastName"
+                label="Họ"
+                rules={[{ required: true, message: "Vui lòng nhập họ!" }]}
               >
-                <Input placeholder="Nhập họ tên" />
+                <Input placeholder="Nhập họ" />
               </Form.Item>
             </Col>
+            <Col span={12}>
+              <Form.Item
+                name="firstName"
+                label="Tên"
+                rules={[{ required: true, message: "Vui lòng nhập tên!" }]}
+              >
+                <Input placeholder="Nhập tên" />
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Row gutter={16}>
             <Col span={12}>
               <Form.Item
                 name="email"
@@ -413,14 +419,14 @@ const UserListAdminComponent = () => {
                 <Input placeholder="Nhập email" disabled={!!editingUser} />
               </Form.Item>
             </Col>
-          </Row>
-
-          <Row gutter={16}>
             <Col span={12}>
               <Form.Item name="phone" label="Số điện thoại">
                 <Input placeholder="Nhập số điện thoại" />
               </Form.Item>
             </Col>
+          </Row>
+
+          <Row gutter={16}>
             <Col span={12}>
               <Form.Item
                 name="role"
@@ -435,9 +441,6 @@ const UserListAdminComponent = () => {
                 </Select>
               </Form.Item>
             </Col>
-          </Row>
-
-          <Row gutter={16}>
             <Col span={12}>
               <Form.Item name="status" label="Trạng thái" initialValue="active">
                 <Select>
@@ -447,6 +450,9 @@ const UserListAdminComponent = () => {
                 </Select>
               </Form.Item>
             </Col>
+          </Row>
+
+          <Row gutter={16}>
             <Col span={12}>
               {/* Password field only for Create or explicit reset? usually handled separately */}
               {!editingUser && (

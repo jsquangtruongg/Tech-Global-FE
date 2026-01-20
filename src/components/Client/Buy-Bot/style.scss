@@ -1,0 +1,230 @@
+.buy-bot {
+  min-height: 80vh;
+  background: #f5f7fb;
+  padding: 28px 16px 48px;
+
+  .bb-header {
+    max-width: 1100px;
+    margin: 0 auto 18px;
+
+    .bb-title {
+      font-size: 28px;
+      font-weight: 700;
+      font-family: "Inter", sans-serif;
+      color: #111827;
+      margin: 0 0 6px;
+    }
+
+    .bb-subtitle {
+      font-size: 14px;
+      color: #6b7280;
+      line-height: 1.5;
+    }
+  }
+
+  .bb-body {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.4fr 0.9fr;
+    gap: 18px;
+    align-items: start;
+  }
+
+  .bb-section {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 6px 18px rgba(17, 24, 39, 0.06);
+    border: 1px solid rgba(17, 24, 39, 0.06);
+    margin-bottom: 14px;
+  }
+
+  .bb-section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 12px;
+  }
+
+  .bb-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 6px;
+  }
+
+  .bb-product-row {
+    display: grid;
+    grid-template-columns: 1fr 240px;
+    gap: 12px;
+    align-items: end;
+  }
+
+  .bb-select {
+    width: 100%;
+  }
+
+  .bb-highlights {
+    margin-top: 12px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+
+    .bb-highlight {
+      font-size: 12px;
+      color: #065f46;
+      background: #ecfdf5;
+      border: 1px solid rgba(6, 95, 70, 0.15);
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+  }
+
+  .bb-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  .bb-check-price {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+
+    .bb-btn-check {
+      height: 44px;
+
+      border-radius: 10px;
+    }
+  }
+
+  .bb-coupon-col {
+    display: flex;
+    font-family: "Inter", sans-serif;
+    flex-direction: column;
+  }
+
+  .bb-coupon-ok {
+    margin-top: 6px;
+    font-size: 12px;
+    color: #16a34a;
+    font-weight: 700;
+  }
+
+  .bb-agree {
+    margin-top: 10px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: #f9fafb;
+    border: 1px solid rgba(17, 24, 39, 0.08);
+
+    &.error {
+      border-color: rgba(239, 68, 68, 0.55);
+      background: rgba(254, 226, 226, 0.35);
+    }
+
+    .bb-agree-error {
+      margin-top: 6px;
+      font-size: 12px;
+      color: #ef4444;
+      font-weight: 600;
+    }
+  }
+
+  .bb-summary {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 6px 18px rgba(17, 24, 39, 0.06);
+    border: 1px solid rgba(17, 24, 39, 0.06);
+    position: sticky;
+    top: 14px;
+  }
+
+  .bb-summary-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 12px;
+  }
+
+  .bb-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px dashed rgba(17, 24, 39, 0.12);
+
+    .bb-row-label {
+      color: #6b7280;
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .bb-row-value {
+      color: #111827;
+      font-weight: 600;
+      font-size: 13px;
+      text-align: right;
+    }
+  }
+
+  .bb-muted {
+    color: #6b7280;
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  .bb-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-top: 12px;
+    margin-top: 8px;
+
+    .bb-total-value {
+      font-size: 20px;
+      font-weight: 700;
+      color: #16a34a;
+    }
+  }
+
+  .bb-note {
+    margin-top: 10px;
+    font-size: 12px;
+    color: #6b7280;
+    line-height: 1.5;
+  }
+
+  .bb-pay {
+    margin-top: 12px;
+    width: 100%;
+    height: 44px;
+    border-radius: 10px;
+    font-weight: 800;
+  }
+
+  @media (max-width: 980px) {
+    .bb-body {
+      grid-template-columns: 1fr;
+    }
+
+    .bb-summary {
+      position: static;
+    }
+  }
+
+  @media (max-width: 680px) {
+    .bb-product-row {
+      grid-template-columns: 1fr;
+    }
+
+    .bb-form-row {
+      grid-template-columns: 1fr;
+    }
+  }
+}

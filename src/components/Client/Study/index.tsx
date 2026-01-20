@@ -6,9 +6,10 @@ import {
   DotChartOutlined,
   ArrowLeftOutlined,
   ArrowRightOutlined,
+  CloseCircleOutlined,
 } from "@ant-design/icons";
 import { getAllStudiesAPI } from "../../../api/study";
-import { message, Spin, Empty } from "antd";
+import { message, Spin, Empty, Tag } from "antd";
 
 interface Question {
   id: number;
@@ -20,6 +21,8 @@ interface Question {
     type: "image" | "video";
     url: string;
   };
+  explanation?: string;
+  correctAnswerText?: string;
 }
 
 const StudyComponent = () => {
@@ -89,6 +92,8 @@ const StudyComponent = () => {
               options: options.length > 0 ? options : undefined,
               correctOption: correctOption !== -1 ? correctOption : undefined,
               media,
+              explanation: item.explanation,
+              correctAnswerText: item.correct_answer,
             };
           });
           setQuestions(formattedQuestions);
@@ -225,19 +230,47 @@ const StudyComponent = () => {
               {questions.map((q, index) => {
                 const isAnswered = answers[q.id] !== undefined;
                 const isCurrent = index === currentQuestionIndex;
+                let statusClass = "";
+                let Icon = null;
+
+                if (isSubmitted) {
+                  if (q.type === "multiple-choice") {
+                    if (isAnswered && answers[q.id] === q.correctOption) {
+                      statusClass = "correct";
+                      Icon = (
+                        <CheckCircleOutlined className="check-icon success" />
+                      );
+                    } else {
+                      statusClass = "wrong";
+                      Icon = (
+                        <CloseCircleOutlined className="check-icon danger" />
+                      );
+                    }
+                  } else {
+                    // Essay/Case-study: Assume 'info' or 'answered' state
+                    statusClass = isAnswered ? "answered" : "";
+                    Icon = isAnswered ? (
+                      <CheckCircleOutlined className="check-icon" />
+                    ) : null;
+                  }
+                } else {
+                  if (isAnswered) {
+                    statusClass = "answered";
+                    Icon = <CheckCircleOutlined className="check-icon" />;
+                  }
+                }
+
                 return (
                   <button
                     key={q.id}
-                    className={`q-nav-item ${isCurrent ? "active" : ""} ${
-                      isAnswered ? "answered" : ""
-                    }`}
+                    className={`q-nav-item ${
+                      isCurrent ? "active" : ""
+                    } ${statusClass}`}
                     onClick={() => setCurrentQuestionIndex(index)}
                   >
                     <span className="q-num">{index + 1}</span>
                     <span className="q-preview">{q.question}</span>
-                    {isAnswered && (
-                      <CheckCircleOutlined className="check-icon" />
-                    )}
+                    {Icon}
                   </button>
                 );
               })}
@@ -361,6 +394,73 @@ const StudyComponent = () => {
                       className="study-textarea"
                     />
                   </div>
+                </div>
+              )}
+
+              {isSubmitted && (
+                <div
+                  className="explanation-box"
+                  style={{
+                    marginTop: 20,
+                    padding: 15,
+                    background: "#f6ffed",
+                    border: "1px solid #b7eb8f",
+                    borderRadius: 8,
+                  }}
+                >
+                  <h4 style={{ margin: "0 0 10px 0", color: "#389e0d" }}>
+                    Lời giải chi tiết:
+                  </h4>
+
+                  {currentQuestion.type === "multiple-choice" &&
+                    currentQuestion.options &&
+                    currentQuestion.correctOption !== undefined && (
+                      <div
+                        className="correct-answer-text"
+                        style={{ marginBottom: 10 }}
+                      >
+                        <strong style={{ color: "#389e0d" }}>
+                          Đáp án đúng:{" "}
+                        </strong>
+                        <span>
+                          {
+                            currentQuestion.options[
+                              currentQuestion.correctOption
+                            ]
+                          }
+                        </span>
+                      </div>
+                    )}
+
+                  {currentQuestion.explanation ? (
+                    <p style={{ whiteSpace: "pre-wrap" }}>
+                      {currentQuestion.explanation}
+                    </p>
+                  ) : (
+                    <p style={{ color: "#8c8c8c", fontStyle: "italic" }}>
+                      Chưa có lời giải chi tiết cho câu hỏi này.
+                    </p>
+                  )}
+
+                  {(currentQuestion.type === "essay" ||
+                    currentQuestion.type === "case-study") &&
+                    currentQuestion.correctAnswerText && (
+                      <div
+                        className="suggested-answer"
+                        style={{
+                          marginTop: 15,
+                          borderTop: "1px dashed #b7eb8f",
+                          paddingTop: 10,
+                        }}
+                      >
+                        <strong style={{ color: "#096dd9" }}>
+                          Gợi ý trả lời / Đáp án tham khảo:
+                        </strong>
+                        <p style={{ whiteSpace: "pre-wrap", marginTop: 5 }}>
+                          {currentQuestion.correctAnswerText}
+                        </p>
+                      </div>
+                    )}
                 </div>
               )}
             </div>

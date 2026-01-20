@@ -1,5 +1,5 @@
 .course-page {
-  padding: 5px 200px;
+  padding: 5px 150px;
   margin-top: 70px;
   height: 100%;
   .course-header {
@@ -269,12 +269,12 @@
       }
     }
   }
-.no-courses{
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+  .no-courses {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
   // Remove old classes
   .card-header,
   .card-body,

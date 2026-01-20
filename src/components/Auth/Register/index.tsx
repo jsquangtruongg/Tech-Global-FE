@@ -6,6 +6,8 @@ import {
   InputCommonPassword,
 } from "../../Common/InputCommon";
 import { useState, type ChangeEvent, type FormEvent } from "react";
+import { Link } from "react-router-dom";
+import { useRegister } from "../../../hooks/useAuth";
 
 interface FormErrors {
   firstName?: string;
@@ -25,6 +27,7 @@ const RegisterComponent = () => {
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
+  const { mutate: register, isPending } = useRegister();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -65,8 +68,12 @@ const RegisterComponent = () => {
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
     } else {
-      console.log("Form submitted:", formData);
-      // Handle success (e.g., API call)
+      register({
+        email: formData.email,
+        password: formData.password,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+      });
     }
   };
   return (
@@ -135,16 +142,20 @@ const RegisterComponent = () => {
           />
           <span className="form-register">
             Đã có tài khoản?{" "}
-            <a href="/login" className="link-login">
+            <Link to="/login" className="link-login">
               Đăng nhập
-            </a>
+            </Link>
           </span>
           <div className="form-actions">
-            <button type="submit" className="btn-submit">
-              Đăng ký
+            <button
+              type="submit"
+              className="btn-submit"
+              disabled={isPending}
+              style={{ opacity: isPending ? 0.7 : 1 }}
+            >
+              {isPending ? "Đang đăng ký..." : "Đăng ký"}
             </button>
           </div>
-          
         </form>
         
       </div>

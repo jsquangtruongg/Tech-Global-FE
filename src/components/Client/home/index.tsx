@@ -1,12 +1,11 @@
+import { useEffect, useState } from "react";
+import { getAllPostsAPI, type IPost } from "../../../api/post";
+import { useNavigate } from "react-router-dom";
 import "./style.scss";
 import ImgPage from "../../../assets/images/Illustration.png";
 import ImgOrganization from "../../../assets/images/Frame 35.png";
 import panda from "../../../assets/images/pana.png";
 import stock from "../../../assets/images/8-2-1900x1069.jpg";
-import xau from "../../../assets/images/Bieu-Do-Gia-Vang-The-Gioi-XAUUSD-1000x563.jpg.webp";
-import strategy from "../../../assets/images/photo1628488762782-16284887628911591767592.jpg";
-import middle from "../../../assets/images/1306618_screenshot_2024_03_27_052505_png_16200627.jpg";
-import FooterLayout from "../../../layout/FooterLayoutClient";
 
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import Diversity3OutlinedIcon from "@mui/icons-material/Diversity3Outlined";
@@ -14,8 +13,22 @@ import PlayCircleOutlinedIcon from "@mui/icons-material/PlayCircleOutlined";
 import PublicOutlinedIcon from "@mui/icons-material/PublicOutlined";
 import CreditScoreOutlinedIcon from "@mui/icons-material/CreditScoreOutlined";
 import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
-
+import TonalityIcon from "@mui/icons-material/Tonality";
+import WebhookIcon from "@mui/icons-material/Webhook";
 const HomeComponent = () => {
+  const [posts, setPosts] = useState<IPost[]>([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const res = await getAllPostsAPI();
+      if (res && res.err === 0) {
+        setPosts(res.data);
+      }
+    };
+    fetchPosts();
+  }, []);
+
   return (
     <>
       <div className="home">
@@ -68,7 +81,7 @@ const HomeComponent = () => {
             </div>
             <div className="item-user">
               <div className="item-outline">
-                <Diversity3OutlinedIcon className="user-icon" />
+                <TonalityIcon className="user-icon" />
               </div>
               <p className="txt-organization">Hiệp hội quốc gia</p>
               <p className="txt-desc">
@@ -78,7 +91,7 @@ const HomeComponent = () => {
             </div>
             <div className="item-user">
               <div className="item-outline">
-                <Diversity3OutlinedIcon className="user-icon" />
+                <WebhookIcon className="user-icon" />
               </div>
               <p className="txt-organization">Câu lạc bộ và nhóm</p>
               <p className="txt-desc">
@@ -98,8 +111,8 @@ const HomeComponent = () => {
               </div>
               <div className="txt-organization">
                 <p className="txt-organization-desc">
-                  Những điều chưa được biết đến trong ba <br /> năm làm việc tại
-                  Pixelgrad
+                  Những điều chưa được biết khi đến với
+                  <br /> Tech Global
                 </p>
                 <p className="txt-desc-organization">
                   Phần mềm Chuyên viên Phân tích là giải pháp hỗ trợ toàn diện
@@ -172,16 +185,19 @@ const HomeComponent = () => {
             </div>
             <div className="txt-organization">
               <p className="txt-organization-desc">
-                Hệ thống bảo mật vượt trội KYC <br /> nhận diện khuôn mặt 3 bước
+                Bot giao dịch tự động thông minh <br /> phân tích và vào lệnh
+                chính xác
               </p>
               <p className="txt-desc-organization">
-                Hệ thống bảo mật vượt trội với công nghệ KYC nhận diện khuôn mặt
-                3 bước giúp xác minh danh tính người dùng nhanh chóng và chính
-                xác. Quy trình bao gồm thu thập thông tin, đối chiếu giấy tờ và
-                xác thực khuôn mặt theo thời gian thực, đảm bảo tính an toàn và
-                hạn chế tối đa gian lận. Giải pháp không chỉ nâng cao mức độ bảo
-                mật cho hệ thống mà còn mang lại trải nghiệm thuận tiện, liền
-                mạch cho người dùng trong quá trình đăng ký và sử dụng dịch vụ.
+                Hệ thống bot giao dịch tự động được xây dựng dựa trên các thuật
+                toán phân tích kỹ thuật như EMA, RSI, Price Action và xu hướng
+                thị trường. Bot liên tục theo dõi biến động giá theo thời gian
+                thực, tự động phát hiện cơ hội BUY – SELL và gửi tín hiệu hoặc
+                vào lệnh ngay khi hội tụ đủ điều kiện. Nhờ khả năng xử lý dữ
+                liệu nhanh và loại bỏ yếu tố cảm xúc, bot giúp trader tối ưu
+                điểm vào lệnh, giảm rủi ro và nâng cao hiệu suất giao dịch, đặc
+                biệt trong thị trường biến động mạnh như vàng (XAU/USD), forex
+                và crypto.
               </p>
               <button className="btn-more">Xem thêm</button>
             </div>
@@ -200,54 +216,31 @@ const HomeComponent = () => {
             đầu tư bền vững, thành công.
           </p>
           <div className="list-blog">
-            <div className="blog-item">
-              <img src={stock} alt="" className="img-blog" />
-              <div className="blog-content">
-                <p className="txt-blog-title">
-                  Dự báo giá vàng: XAU/USD chưa dừng lại ở mức cao kỷ lục
-                </p>
-                <div className="blog-more">
-                  <p className="txt-more">Xem thêm</p>
-                  <ArrowRightAltIcon className="icon-more" />
+            {posts.length > 0 ? (
+              posts.slice(0, 4).map((post, index) => (
+                <div className="blog-item" key={post.id || index}>
+                  <img
+                    src={post.image || stock}
+                    alt={post.title}
+                    className="img-blog"
+                  />
+                  <div
+                    className="blog-content"
+                    onClick={() =>
+                      post.id && navigate(`/blog-detail/${post.id}`)
+                    }
+                  >
+                    <p className="txt-blog-title">{post.title}</p>
+                    <div className="blog-more">
+                      <p className="txt-more">Xem thêm</p>
+                      <ArrowRightAltIcon className="icon-more" />
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div className="blog-item">
-              <img src={xau} alt="" className="img-blog" />
-              <div className="blog-content">
-                <p className="txt-blog-title">
-                  Dự báo tăng trưởng của giá vàng ngày hôm nay
-                </p>
-                <div className="blog-more">
-                  <p className="txt-more">Xem thêm</p>
-                  <ArrowRightAltIcon className="icon-more" />
-                </div>
-              </div>
-            </div>
-            <div className="blog-item">
-              <img src={strategy} alt="" className="img-blog" />
-              <div className="blog-content">
-                <p className="txt-blog-title">
-                  Chiến lượt đầu tư vàng dài hạn của các nhà đầu tư lớn
-                </p>
-                <div className="blog-more">
-                  <p className="txt-more">Xem thêm</p>
-                  <ArrowRightAltIcon className="icon-more" />
-                </div>
-              </div>
-            </div>
-            <div className="blog-item">
-              <img src={middle} alt="" className="img-blog" />
-              <div className="blog-content">
-                <p className="txt-blog-title">
-                  Chiến tranh trung đông (vàng tăng phi mã)
-                </p>
-                <div className="blog-more">
-                  <p className="txt-more">Xem thêm</p>
-                  <ArrowRightAltIcon className="icon-more" />
-                </div>
-              </div>
-            </div>
+              ))
+            ) : (
+              <p className="txt-desc">Chưa có bài viết nào.</p>
+            )}
           </div>
         </div>
       </div>
