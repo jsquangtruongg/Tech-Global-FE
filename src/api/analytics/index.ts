@@ -18,6 +18,21 @@ export interface IDashboardResponse {
   };
 }
 
+export interface IGoldNewsItem {
+  id: string;
+  title: string;
+  source: string;
+  url: string;
+  publishedAt: string;
+  titleVi?: string;
+}
+
+export interface IGoldNewsResponse {
+  err: number;
+  mess: string;
+  data: IGoldNewsItem[];
+}
+
 export const getDashboardDataAPI = async (): Promise<IDashboardResponse> => {
   try {
     const { data } = await API.get("/analytics/dashboard");
@@ -39,6 +54,19 @@ export const getDashboardDataAPI = async (): Promise<IDashboardResponse> => {
           postCategories: [],
         },
       },
+    };
+  }
+};
+
+export const getGoldNewsAPI = async (): Promise<IGoldNewsResponse> => {
+  try {
+    const { data } = await API.get("/analytics/gold-news");
+    return data;
+  } catch (error) {
+    return {
+      err: 1,
+      mess: "Lỗi khi tải tin tức vàng",
+      data: [],
     };
   }
 };

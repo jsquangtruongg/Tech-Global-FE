@@ -1,15 +1,47 @@
 import "./style.scss";
+import { useEffect, useState } from "react";
 import StarRateIcon from "@mui/icons-material/StarRate";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import NewspaperIcon from "@mui/icons-material/Newspaper";
-
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import "dayjs/locale/vi";
+import { getGoldNewsAPI, type IGoldNewsItem } from "../../../api/analytics";
 import ChartLong from "../../../assets/images/F4ln8b8T_mid.png";
 import ChartShort from "../../../assets/images/s3Bp9oE0-637511160372186596.png";
 
+dayjs.extend(relativeTime);
+dayjs.locale("vi");
+
 const XauComponent = () => {
+  const [news, setNews] = useState<IGoldNewsItem[]>([]);
+  const [loadingNews, setLoadingNews] = useState(false);
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      setLoadingNews(true);
+      const res = await getGoldNewsAPI();
+      if (res.err === 0 && Array.isArray(res.data)) {
+        setNews(res.data.slice(0, 8));
+      } else {
+        setNews([]);
+      }
+      setLoadingNews(false);
+    };
+
+    fetchNews();
+  }, []);
+
+  const renderNewsTime = (iso: string) => {
+    if (!iso) return "";
+    const d = dayjs(iso);
+    if (!d.isValid()) return "";
+    return d.fromNow();
+  };
+
   return (
     <div className="xau-wrapper">
       <div className="xau-container">
@@ -35,34 +67,32 @@ const XauComponent = () => {
             <h2 className="section-title">TIN TỨC ẢNH HƯỞNG</h2>
           </div>
           <div className="news-grid">
-            {[
-              {
-                text: "Fed chuẩn bị tăng lãi suất trong cuộc họp tới",
-                time: "3 giờ trước",
-              },
-              {
-                text: "Chỉ số CPI tháng 4 cao hơn dự báo, lạm phát gia tăng",
-                time: "2 giờ trước",
-              },
-              {
-                text: "USD giảm mạnh sau phát biểu của Chủ tịch Fed",
-                time: "1 giờ trước",
-              },
-              {
-                text: "Căng thẳng Nga - Ukraine leo thang",
-                time: "30 phút trước",
-              },
-            ].map((news, index) => (
-              <div key={index} className="news-card">
-                <div className="news-card-icon">
-                  <StarRateIcon />
-                </div>
-                <div className="news-card-content">
-                  <p className="news-text">{news.text}</p>
-                  <span className="news-time">{news.time}</span>
-                </div>
-              </div>
-            ))}
+            {loadingNews && (
+              <div className="news-empty">Đang tải tin tức vàng...</div>
+            )}
+            {!loadingNews && news.length === 0 && (
+              <div className="news-empty">Hiện chưa lấy được tin tức vàng.</div>
+            )}
+            {!loadingNews &&
+              news.map((item) => (
+                <a
+                  key={item.id}
+                  className="news-card"
+                  href={item.url}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <div className="news-card-icon">
+                    <StarRateIcon />
+                  </div>
+                  <div className="news-card-content">
+                    <p className="news-text">{item.titleVi || item.title}</p>
+                    <span className="news-source">
+                      {item.source} • {renderNewsTime(item.publishedAt)}
+                    </span>
+                  </div>
+                </a>
+              ))}
           </div>
         </section>
 
