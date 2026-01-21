@@ -59,3 +59,41 @@
     }
   }
 }
+
+@media (max-width: 1200px) {
+  .auth-layout {
+    .auth-container {
+      width: 1000px;
+      height: auto;
+    }
+  }
+}
+
+@media (max-width: 992px) {
+  .auth-layout {
+    .auth-container {
+      width: 100%;
+      max-width: 900px;
+      height: auto;
+      border-radius: 16px;
+    }
+    .auth-container .auth-right {
+      padding: 24px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .auth-layout {
+    .auth-container {
+      width: 100%;
+      max-width: 560px;
+      height: auto;
+      border-radius: 14px;
+    }
+    .auth-container .auth-right {
+      width: 100%;
+      padding: 16px;
+    }
+  }
+}

@@ -70,3 +70,38 @@ export const getGoldNewsAPI = async (): Promise<IGoldNewsResponse> => {
     };
   }
 };
+
+export const postUserActivityAPI = async (payload: {
+  userId?: string | number;
+  timestamp: string;
+  device: string;
+  os?: string;
+  browser?: string;
+}): Promise<{ err: number; mess: string }> => {
+  try {
+    const { data } = await API.post("/user/activity", payload);
+    return data;
+  } catch (error) {
+    return { err: 1, mess: "Không thể gửi hoạt động người dùng" };
+  }
+};
+
+export const getUserActivityStatsAPI = async (): Promise<{
+  err: number;
+  mess: string;
+  data: {
+    byHour: { hour: string; count: number }[];
+    byDevice: { Desktop: number; Mobile: number; Tablet: number };
+  };
+}> => {
+  try {
+    const { data } = await API.get("/user/activity/stats");
+    return data;
+  } catch (error) {
+    return {
+      err: 1,
+      mess: "Không thể tải thống kê hoạt động",
+      data: { byHour: [], byDevice: { Desktop: 0, Mobile: 0, Tablet: 0 } },
+    };
+  }
+};

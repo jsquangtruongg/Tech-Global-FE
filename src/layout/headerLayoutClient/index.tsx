@@ -8,7 +8,7 @@ import SmartToyOutlinedIcon from "@mui/icons-material/SmartToyOutlined";
 import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
 import ApiOutlinedIcon from "@mui/icons-material/ApiOutlined";
 import FooterLayout from "../FooterLayoutClient";
-import { Dropdown, Avatar, Space } from "antd";
+import { Dropdown, Avatar, Drawer } from "antd";
 import type { MenuProps } from "antd";
 import {
   UserOutlined,
@@ -16,12 +16,15 @@ import {
   BookOutlined,
   LogoutOutlined,
   ApiOutlined,
+  MenuOutlined,
 } from "@ant-design/icons";
 import { useEffect, useState } from "react";
+import { postUserActivityAPI } from "../../api/analytics";
 
 const HeaderLayout = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState<any>(null);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
     const profile = localStorage.getItem("profile");
@@ -29,6 +32,72 @@ const HeaderLayout = () => {
       setUser(JSON.parse(profile));
     }
   }, []);
+
+  useEffect(() => {
+    const getDeviceInfo = () => {
+      const ua = navigator.userAgent || "";
+      const isMobile = /Mobi|Android/i.test(ua);
+      const isTablet = /iPad|Tablet/i.test(ua);
+      const device = isMobile ? "Mobile" : isTablet ? "Tablet" : "Desktop";
+      let os = "Unknown";
+      if (/Windows/i.test(ua)) os = "Windows";
+      else if (/Mac OS/i.test(ua)) os = "macOS";
+      else if (/Android/i.test(ua)) os = "Android";
+      else if (/iPhone|iPad|iPod/i.test(ua)) os = "iOS";
+      let browser = "Unknown";
+      if (/Chrome\//i.test(ua)) browser = "Chrome";
+      else if (/Firefox\//i.test(ua)) browser = "Firefox";
+      else if (/Safari\//i.test(ua) && !/Chrome\//i.test(ua))
+        browser = "Safari";
+      else if (/Edg\//i.test(ua)) browser = "Edge";
+      return { device, os, browser };
+    };
+
+    const recordEvent = () => {
+      const { device, os, browser } = getDeviceInfo();
+      const ev = { t: Date.now(), device, os, browser };
+      const raw = localStorage.getItem("tg_user_events");
+      const arr = raw ? JSON.parse(raw) : [];
+      arr.push(ev);
+      if (arr.length > 500) arr.shift();
+      localStorage.setItem("tg_user_events", JSON.stringify(arr));
+      const id = user?.userData?.id || user?.id || "guest";
+      localStorage.setItem(
+        "tg_user_last_active",
+        JSON.stringify({ id, ts: ev.t, device, os, browser }),
+      );
+      postUserActivityAPI({
+        userId: id,
+        timestamp: new Date(ev.t).toISOString(),
+        device,
+        os,
+        browser,
+      });
+    };
+
+    const handleActivity = () => {
+      recordEvent();
+    };
+    const handleVisibility = () => {
+      if (document.visibilityState === "visible") recordEvent();
+    };
+
+    window.addEventListener("mousemove", handleActivity);
+    window.addEventListener("keydown", handleActivity);
+    window.addEventListener("click", handleActivity);
+    document.addEventListener("visibilitychange", handleVisibility);
+    const interval = setInterval(() => {
+      if (document.visibilityState === "visible") recordEvent();
+    }, 30000);
+
+    return () => {
+      window.removeEventListener("mousemove", handleActivity);
+      window.removeEventListener("keydown", handleActivity);
+      window.removeEventListener("click", handleActivity);
+      document.removeEventListener("visibilitychange", handleVisibility);
+      clearInterval(interval);
+    };
+  }, [user]);
 
   const handleLogout = () => {
     localStorage.removeItem("profile");
@@ -256,12 +325,95 @@ const HeaderLayout = () => {
               </div>
             )}
           </div>
+          <div
+            className="mobile-toggle"
+            onClick={() => setMobileOpen(true)}
+            aria-label="open menu"
+          >
+            <MenuOutlined />
+          </div>
         </div>
       </div>
       <div className="header-layout-main">
         <Outlet />
       </div>
 
+      <Drawer
+        title="Menu"
+        placement="right"
+        open={mobileOpen}
+        onClose={() => setMobileOpen(false)}
+      >
+        <div className="mobile-menu">
+          <div className="mobile-menu-item" onClick={() => navigate("/home")}>
+            Trang chủ
+          </div>
+          <div className="mobile-menu-section-title">Tính năng</div>
+          <div className="mobile-menu-item" onClick={handleClickXau}>
+            Phân Tích
+          </div>
+          <div className="mobile-menu-item" onClick={handleClickMargin}>
+            Top câu hỏi phỏng vấn
+          </div>
+          <div className="mobile-menu-item" onClick={handleClickCourse}>
+            Khóa học
+          </div>
+          <div className="mobile-menu-item" onClick={handleClickTraderDNA}>
+            Trader DNA
+          </div>
+          <div className="mobile-menu-item" onClick={handleClickBotTrade}>
+            Bot giao dịch
+          </div>
+          <div className="mobile-menu-item" onClick={handleClickFund}>
+            Quỹ Giao Dịch Uy Tín
+          </div>
+          <div className="mobile-menu-item" onClick={handleClickBlog}>
+            Bài viết
+          </div>
+          <div className="mobile-menu-item" onClick={handleClickContact}>
+            Liên hệ
+          </div>
+          {user ? (
+            <>
+              <div className="mobile-menu-section-title">Tài khoản</div>
+              <div
+                className="mobile-menu-item"
+                onClick={() => navigate("/profile")}
+              >
+                Thông tin tài khoản
+              </div>
+              <div
+                className="mobile-menu-item"
+                onClick={() => navigate("/setting")}
+              >
+                Cài đặt
+              </div>
+              <div
+                className="mobile-menu-item"
+                onClick={() => navigate("/course-user")}
+              >
+                Khóa học hiện có
+              </div>
+              {(user?.userData?.roleData?.code === "R1" ||
+                user?.userData?.roleData?.code === "R2") && (
+                <div
+                  className="mobile-menu-item"
+                  onClick={() => navigate("/admin/dashboard")}
+                >
+                  Admin & Quản lý
+                </div>
+              )}
+              <div className="mobile-menu-item danger" onClick={handleLogout}>
+                Đăng xuất
+              </div>
+            </>
+          ) : (
+            <div className="mobile-menu-item" onClick={handleClickRegister}>
+              Đăng ký
+            </div>
+          )}
+        </div>
+      </Drawer>
       <FooterLayout />
     </>
   );

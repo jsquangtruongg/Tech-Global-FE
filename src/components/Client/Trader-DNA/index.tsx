@@ -393,7 +393,6 @@ const TraderDNAComponent = () => {
           lược nào phù hợp nhất với bạn.
         </Paragraph>
         <Button
-          type="primary"
           size="large"
           onClick={handleStart}
           className="btn-start"

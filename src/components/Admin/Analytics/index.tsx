@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo, useEffect, useState } from "react";
 import { Card, Row, Col, Table, Tag, Progress, Tabs } from "antd";
 import {
   BarChart,
@@ -27,18 +27,65 @@ import {
   TabletOutlined,
 } from "@ant-design/icons";
 import "./style.scss";
+import { getUserActivityStatsAPI } from "../../../api/analytics";
 
 const AnalyticsAdminComponent = () => {
-  // Mock Data
-  const activityData = [
-    { time: "00:00", users: 120 },
-    { time: "04:00", users: 50 },
-    { time: "08:00", users: 450 },
-    { time: "12:00", users: 890 },
-    { time: "16:00", users: 780 },
-    { time: "20:00", users: 1100 },
-    { time: "23:59", users: 340 },
-  ];
+  const computeLocalStats = () => {
+    const raw = localStorage.getItem("tg_user_events");
+    const events: Array<{ t: number; device: string }> = raw
+      ? JSON.parse(raw)
+      : [];
+    const buckets: Record<string, number> = {};
+    const deviceBuckets: Record<string, number> = {
+      Desktop: 0,
+      Mobile: 0,
+      Tablet: 0,
+    };
+    events.forEach((ev) => {
+      const d = new Date(ev.t);
+      const hour = String(d.getHours()).padStart(2, "0") + ":00";
+      buckets[hour] = (buckets[hour] || 0) + 1;
+      if (ev.device in deviceBuckets)
+        deviceBuckets[ev.device as keyof typeof deviceBuckets] += 1;
+    });
+    const activityData = Array.from({ length: 24 }, (_, h) => {
+      const label = `${String(h).padStart(2, "0")}:00`;
+      return { time: label, users: buckets[label] || 0 };
+    });
+    const deviceData = [
+      { name: "Desktop", value: deviceBuckets.Desktop },
+      { name: "Mobile", value: deviceBuckets.Mobile },
+      { name: "Tablet", value: deviceBuckets.Tablet },
+    ];
+    return { activityData, deviceData };
+  };
+  const local = useMemo(() => computeLocalStats(), []);
+  const [activityData, setActivityData] = useState(local.activityData);
+  const [deviceData, setDeviceData] = useState(local.deviceData);
+
+  useEffect(() => {
+    const load = async () => {
+      const res = await getUserActivityStatsAPI();
+      if (res.err === 0 && res.data) {
+        const act = res.data.byHour.map((h) => ({
+          time: h.hour,
+          users: h.count,
+        }));
+        const dev = [
+          { name: "Desktop", value: res.data.byDevice.Desktop || 0 },
+          { name: "Mobile", value: res.data.byDevice.Mobile || 0 },
+          { name: "Tablet", value: res.data.byDevice.Tablet || 0 },
+        ];
+        setActivityData(act.length ? act : local.activityData);
+        setDeviceData(dev);
+      } else {
+        const fallback = computeLocalStats();
+        setActivityData(fallback.activityData);
+        setDeviceData(fallback.deviceData);
+      }
+    };
+    load();
+  }, []);
 
   const courseInterestData = [
     { name: "Phân tích kỹ thuật", interest: 85, students: 1200 },
@@ -53,12 +100,6 @@ const AnalyticsAdminComponent = () => {
     { name: "Ebook Trading", sales: 3000, revenue: 13980000 },
     { name: "Coaching 1:1", sales: 2000, revenue: 98000000 },
     { name: "Signal VIP", sales: 2780, revenue: 39080000 },
-  ];
-
-  const deviceData = [
-    { name: "Desktop", value: 60 },
-    { name: "Mobile", value: 35 },
-    { name: "Tablet", value: 5 },
   ];
 
   const journeyData = [
@@ -87,7 +128,7 @@ const AnalyticsAdminComponent = () => {
 
   const totalJourneyUsers = journeyData.reduce(
     (sum, item) => sum + item.users,
-    0
+    0,
   );
 
   const journeyShareData = journeyData.map((item) => ({
@@ -190,15 +231,25 @@ const AnalyticsAdminComponent = () => {
               </PieChart>
             </ResponsiveContainer>
             <div style={{ textAlign: "center", marginTop: 20 }}>
-              <Tag icon={<DesktopOutlined />} color="blue">
-                Desktop 60%
-              </Tag>
-              <Tag icon={<MobileOutlined />} color="green">
-                Mobile 35%
-              </Tag>
-              <Tag icon={<TabletOutlined />} color="orange">
-                Tablet 5%
-              </Tag>
+              {(() => {
+                const total =
+                  deviceData.reduce((s, d) => s + (d.value || 0), 0) || 1;
+                const pct = (v: number) =>
+                  Math.round(((v || 0) / total) * 100) + "%";
+                return (
+                  <>
+                    <Tag icon={<DesktopOutlined />} color="blue">
+                      Desktop {pct(deviceData[0]?.value || 0)}
+                    </Tag>
+                    <Tag icon={<MobileOutlined />} color="green">
+                      Mobile {pct(deviceData[1]?.value || 0)}
+                    </Tag>
+                    <Tag icon={<TabletOutlined />} color="orange">
+                      Tablet {pct(deviceData[2]?.value || 0)}
+                    </Tag>
+                  </>
+                );
+              })()}
             </div>
           </div>
         </Card>

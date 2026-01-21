@@ -181,23 +181,22 @@ const HomeComponent = () => {
         <div className="client-organization">
           <div className="item-organization">
             <div className="item-img">
-              <img src={panda} alt="" className="img-organization" />
+              <img src={ImgOrganization} alt="" className="img-organization" />
             </div>
             <div className="txt-organization">
               <p className="txt-organization-desc">
-                Bot giao dịch tự động thông minh <br /> phân tích và vào lệnh
-                chính xác
+                Những điều chưa được biết khi đến với
+                <br /> Tech Global
               </p>
               <p className="txt-desc-organization">
-                Hệ thống bot giao dịch tự động được xây dựng dựa trên các thuật
-                toán phân tích kỹ thuật như EMA, RSI, Price Action và xu hướng
-                thị trường. Bot liên tục theo dõi biến động giá theo thời gian
-                thực, tự động phát hiện cơ hội BUY – SELL và gửi tín hiệu hoặc
-                vào lệnh ngay khi hội tụ đủ điều kiện. Nhờ khả năng xử lý dữ
-                liệu nhanh và loại bỏ yếu tố cảm xúc, bot giúp trader tối ưu
-                điểm vào lệnh, giảm rủi ro và nâng cao hiệu suất giao dịch, đặc
-                biệt trong thị trường biến động mạnh như vàng (XAU/USD), forex
-                và crypto.
+                Phần mềm Chuyên viên Phân tích là giải pháp hỗ trợ toàn diện cho
+                việc thu thập, xử lý và phân tích dữ liệu một cách nhanh chóng
+                và chính xác. Phần mềm giúp chuyên viên dễ dàng theo dõi, đánh
+                giá và trực quan hóa thông tin, từ đó đưa ra các quyết định kịp
+                thời và hiệu quả. Với giao diện thân thiện, khả năng tùy chỉnh
+                linh hoạt và hệ thống báo cáo thông minh, phần mềm đáp ứng tốt
+                nhu cầu phân tích trong nhiều lĩnh vực, góp phần nâng cao năng
+                suất làm việc và chất lượng quản lý.
               </p>
               <button className="btn-more">Xem thêm</button>
             </div>

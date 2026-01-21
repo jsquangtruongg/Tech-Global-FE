@@ -68,3 +68,64 @@
     }
   }
 }
+
+@media (max-width: 1200px) {
+  .auth-form-wrapper {
+    max-width: 480px;
+    .auth-title {
+      h1 {
+        font-size: 26px;
+      }
+    }
+  }
+}
+
+@media (max-width: 992px) {
+  .auth-form-wrapper {
+    max-width: 520px;
+    .auth-title {
+      margin-bottom: 24px;
+      h1 {
+        font-size: 24px;
+      }
+      p {
+        font-size: 13px;
+      }
+    }
+    .auth-form-content {
+      .form-main {
+        .form-actions .btn-submit {
+          padding: 12px;
+          font-size: 15px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .auth-form-wrapper {
+    max-width: 100%;
+    .auth-title {
+      margin-bottom: 20px;
+      h1 {
+        font-size: 22px;
+      }
+      p {
+        font-size: 12px;
+      }
+    }
+    .auth-form-content {
+      .form-main {
+        .form-actions .btn-submit {
+          padding: 12px;
+          font-size: 15px;
+          border-radius: 10px;
+        }
+      }
+      .form-register {
+        font-size: 12px;
+      }
+    }
+  }
+}

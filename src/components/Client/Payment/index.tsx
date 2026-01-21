@@ -1,5 +1,6 @@
 import "./style.scss";
 import { useEffect, useMemo, useState } from "react";
+import { message } from "antd";
 import QrCode2Icon from "@mui/icons-material/QrCode2";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
@@ -10,12 +11,17 @@ import ScheduleIcon from "@mui/icons-material/Schedule";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import StarIcon from "@mui/icons-material/Star";
 import { useLocation, useNavigate } from "react-router-dom";
+import { API } from "../../../api/config";
 
 const PaymentComponent = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [result, setResult] = useState<null | "success" | "cancel">(null);
   const [orderCode, setOrderCode] = useState<string | null>(null);
+  const [orderStatus, setOrderStatus] = useState<
+    null | "PENDING" | "PAID" | "CANCELED"
+  >(null);
+  const [polling, setPolling] = useState(false);
   useEffect(() => {
     if (location.pathname.includes("/payment/success")) {
       setResult("success");
@@ -28,6 +34,33 @@ const PaymentComponent = () => {
     const code = params.get("orderCode");
     setOrderCode(code);
   }, [location]);
+
+  useEffect(() => {
+    let timer: any;
+    const poll = async () => {
+      if (!orderCode || result !== "success") return;
+      try {
+        setPolling(true);
+        const res = await API.get(`/payment/status/${orderCode}`);
+        const payload = res.data;
+        if (payload?.err === 0 && payload?.data) {
+          const status = payload.data.status as "PENDING" | "PAID" | "CANCELED";
+          setOrderStatus(status);
+          if (status === "PAID") {
+            setPolling(false);
+            message.success("Đơn hàng đã được xác nhận thanh toán");
+            return;
+          }
+        }
+      } catch {}
+      timer = setTimeout(poll, 5000);
+    };
+    poll();
+    return () => {
+      setPolling(false);
+      if (timer) clearTimeout(timer);
+    };
+  }, [orderCode, result]);
   const course = useMemo(
     () => ({
       title: "Master Price Action từ A-Z",
@@ -37,7 +70,7 @@ const PaymentComponent = () => {
       rating: 4.8,
       price: 999000,
     }),
-    []
+    [],
   );
   type PaymentKey = "bank" | "qr" | "card" | "cash";
   const [payment, setPayment] = useState<PaymentKey>("qr");
@@ -85,7 +118,7 @@ const PaymentComponent = () => {
       "VietBank",
       "VietCredit",
     ],
-    []
+    [],
   );
   const [bankQuery, setBankQuery] = useState("");
   const [selectedBank, setSelectedBank] = useState<string | null>(null);

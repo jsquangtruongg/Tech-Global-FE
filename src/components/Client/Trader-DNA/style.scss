@@ -1,28 +1,37 @@
+$primary: #4aaf52;
+$primary-light: lighten($primary, 40%);
+
 .trader-dna-container {
   max-width: 1000px;
-  margin: 0 auto;
-  padding: 40px 20px;
-  height: 1000px;
+  padding: 20px 20px;
+  min-height: 600px;
+  height: auto;
   background-color: #f5f7fa;
   border-radius: 16px;
-
-  // Intro Screen
+  margin-bottom: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px auto;
   .dna-intro {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     height: 100%;
     text-align: center;
-    padding: 60px 20px;
     background: #fff;
     border-radius: 16px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 
     .intro-content {
+      padding: 40px;
       max-width: 600px;
       margin: 0 auto;
     }
 
     .intro-icon {
       font-size: 64px;
-      color: #1890ff;
+      color: $primary;
       margin-bottom: 24px;
       animation: float 3s ease-in-out infinite;
     }
@@ -40,16 +49,19 @@
     }
 
     .btn-start {
+      background-color: $primary;
       height: 50px;
       font-size: 18px;
       padding: 0 40px;
       border-radius: 25px;
-      box-shadow: 0 4px 15px rgba(24, 144, 255, 0.3);
+      box-shadow: 0 4px 15px rgba($primary, 0.3);
+      transition: all 0.3s ease;
+      color: #fff;
+    }
 
-      &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(24, 144, 255, 0.4);
-      }
+    .btn-start:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba($primary, 0.45);
     }
   }
 
@@ -97,12 +109,12 @@
           transition: all 0.3s ease;
 
           &:hover {
-            border-color: #1890ff;
-            background-color: #e6f7ff;
+            border-color: $primary;
+            background-color: rgba($primary, 0.08);
             transform: translateY(-2px);
 
             .option-circle {
-              background-color: #1890ff;
+              background-color: $primary;
               color: #fff;
             }
           }
@@ -144,7 +156,7 @@
       width: 50px;
       height: 50px;
       border: 4px solid #f3f3f3;
-      border-top: 4px solid #1890ff;
+      border-top: 4px solid $primary;
       border-radius: 50%;
       animation: spin 1s linear infinite;
       margin: 0 auto 24px;
@@ -153,10 +165,10 @@
 
   // Result Screen
   .dna-result {
-    height: 100%;
+    // height: 100%; // Removed to prevent overflow
     background: #fff;
     border-radius: 16px;
-    overflow: hidden;
+    // overflow: hidden; // Removed to prevent content clipping
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 
     .result-header {
@@ -179,7 +191,7 @@
       }
 
       .info-card {
-        height: 100%;
+        // height: 100%;
         border-radius: 12px;
         border: 1px solid #f0f0f0;
 
@@ -204,7 +216,7 @@
       }
 
       .stats-card {
-        height: 100%;
+        // height: 100%;
         background-color: #f9f9f9;
         border: none;
         border-radius: 12px;

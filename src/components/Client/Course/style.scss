@@ -293,6 +293,9 @@
     margin-top: 48px;
     @media (max-width: 900px) {
       flex-direction: column;
+      .course-page {
+        padding: 10px 50px;
+      }
     }
     .marketing-content {
       flex: 1;
@@ -319,6 +322,14 @@
         height: 100%;
         border-radius: 12px;
       }
+    }
+  }
+}
+@media (max-width: 900px) {
+  .course-page {
+    padding: 50px 50px;
+    .course-card{
+      margin-top: 20px;
     }
   }
 }
