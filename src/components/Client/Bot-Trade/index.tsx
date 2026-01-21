@@ -211,7 +211,7 @@ const BotTradeComponent = () => {
             />
           </div>
         ) : (
-          <Row gutter={[20, 20]} className="bot-card-list">
+          <Row gutter={[20, 20]} className="bot-card-list" style={{ margin: "0 auto" }}>
             {visibleBots.map((bot) => (
               <Col key={bot.id} xs={24} sm={12} lg={8} xl={8}>
                 <Card

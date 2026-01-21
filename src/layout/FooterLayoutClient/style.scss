@@ -144,6 +144,82 @@
   color: #e5e7eb;
 }
 
+@media (max-width: 1200px) {
+  .footer-layout {
+    .footer-cta {
+      .cta-title {
+        font-size: 32px;
+      }
+    }
+    .footer-content {
+      padding: 32px 50px;
+      .footer-brand {
+        width: 260px;
+        margin-right: 40px;
+        .brand-logo {
+          .brand-name {
+            font-size: 20px;
+          }
+        }
+      }
+      .footer-links {
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+      }
+    }
+  }
+}
+
+@media (max-width: 992px) {
+  .footer-layout {
+    .footer-cta {
+      height: auto;
+      padding: 24px 16px;
+      .cta-title {
+        font-size: 24px;
+      }
+      .btn-demo {
+        width: 140px;
+        height: 40px;
+        font-size: 14px;
+      }
+    }
+    .footer-content {
+      padding: 24px 16px;
+      flex-direction: column;
+      align-items: flex-start;
+      .footer-brand {
+        width: 100%;
+        margin: 0 0 16px 0;
+      }
+      .footer-links {
+        width: 100%;
+        gap: 16px;
+        .link-group {
+          .link-title {
+            font-size: 15px;
+          }
+          .link-item {
+            font-size: 13px;
+          }
+        }
+        .newsletter {
+          .link-title {
+            font-size: 15px;
+          }
+          .input-email {
+            height: 40px;
+            padding: 0 10px;
+            input {
+              font-size: 13px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 .theme-dark .footer-layout .footer-content {
   background-color: #020617;
   color: #e5e7eb;

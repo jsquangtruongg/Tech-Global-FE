@@ -53,6 +53,10 @@ const RegisterComponent = () => {
     }
     if (!formData.password) {
       newErrors.password = "Vui lòng nhập mật khẩu";
+    } else if (
+      !/(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{6,}/.test(formData.password)
+    ) {
+      newErrors.password = "Mật khẩu phải có chữ Hoa, số và ký tự đặc biệt";
     }
     if (!formData.confirmPassword) {
       newErrors.confirmPassword = "Vui lòng nhập lại mật khẩu";
@@ -157,7 +161,6 @@ const RegisterComponent = () => {
             </button>
           </div>
         </form>
-        
       </div>
     </div>
   );

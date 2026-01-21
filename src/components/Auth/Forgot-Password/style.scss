@@ -1,0 +1,105 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+.auth-form-wrapper {
+  width: 100%;
+  max-width: 430px;
+  font-family: "Inter", sans-serif;
+
+  .auth-title {
+    margin-bottom: 30px;
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 8px;
+    }
+    p {
+      font-size: 14px;
+      color: #6b7280;
+      line-height: 1.5;
+      margin: 0;
+    }
+  }
+
+  .auth-form-content {
+    .form-main {
+      .ant-form-item-label > label {
+        font-weight: 600;
+        color: #1f2937;
+      }
+      .ant-input,
+      .ant-input-password {
+        border-radius: 10px;
+      }
+      .form-actions {
+        margin-top: 10px;
+      }
+      .btn-submit {
+        width: 100%;
+        padding: 12px;
+        background-color: #4aaf52;
+        color: #ffffff;
+        font-size: 16px;
+        font-weight: 600;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+      .btn-submit:hover {
+        background-color: #46b156;
+      }
+      .btn-submit:active {
+        transform: translateY(1px);
+      }
+    }
+  }
+}
+
+@media (max-width: 1200px) {
+  .auth-form-wrapper {
+    max-width: 480px;
+    .auth-title h1 {
+      font-size: 26px;
+    }
+  }
+}
+
+@media (max-width: 992px) {
+  .auth-form-wrapper {
+    max-width: 520px;
+    .auth-title {
+      margin-bottom: 24px;
+      h1 {
+        font-size: 24px;
+      }
+      p {
+        font-size: 13px;
+      }
+    }
+    .auth-form-content .form-main .btn-submit {
+      padding: 12px;
+      font-size: 15px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .auth-form-wrapper {
+    max-width: 100%;
+    .auth-title {
+      margin-bottom: 20px;
+      h1 {
+        font-size: 22px;
+      }
+      p {
+        font-size: 12px;
+      }
+    }
+    .auth-form-content .form-main .btn-submit {
+      padding: 12px;
+      font-size: 15px;
+      border-radius: 10px;
+    }
+  }
+}

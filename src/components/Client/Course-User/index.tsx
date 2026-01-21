@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import "./style.scss";
 import { Tabs, Spin, Empty, Button, message } from "antd";
 import {
-  PlayCircleOutlined,
   ClockCircleOutlined,
   UserOutlined,
   BookOutlined,
@@ -11,13 +10,12 @@ import {
   DeleteOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import { getAllCoursesAPI, type ICourse } from "../../../api/course";
+import { type ICourse } from "../../../api/course";
 import { getCartAPI, removeFromCartAPI } from "../../../api/cart";
 
 const CourseUserComponent = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [courses, setCourses] = useState<ICourse[]>([]);
   const [purchasedCourses, setPurchasedCourses] = useState<ICourse[]>([]);
   const [wishlistCourses, setWishlistCourses] = useState<ICourse[]>([]);
 
@@ -28,23 +26,13 @@ const CourseUserComponent = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      // 1. Fetch mock purchased courses (using all courses for now)
-      // In real app, this should be getPurchasedCoursesAPI()
-      const courseRes = await getAllCoursesAPI({ limit: "all" });
-      if (courseRes.err === 0 && courseRes.data) {
-        // Mock: First 2 courses are purchased
-        setPurchasedCourses(
-          courseRes.data.slice(0, Math.min(2, courseRes.data.length))
-        );
-      }
+      setPurchasedCourses([]);
 
-      // 2. Fetch real wishlist/cart
       const cartRes = await getCartAPI();
       if (cartRes.err === 0 && cartRes.data) {
-        // cartRes.data is Array of CartItem { course: ICourse, ... }
         const carts = cartRes.data.map((item: any) => ({
           ...item.course,
-          cart_id: item.id, // Keep track of cart item id if needed, or just use course id
+          cart_id: item.id,
         }));
         setWishlistCourses(carts);
       }
@@ -56,20 +44,16 @@ const CourseUserComponent = () => {
     }
   };
 
-  const handleContinueLearning = (id: number) => {
-    navigate(`/course-detail/${id}`);
-  };
-
   const handleBuyCourse = (id: number) => {
     navigate(`/payment/${id}`);
     message.info("Chuyển đến trang thanh toán...");
   };
-const handleCourseStudy = (id: number) => {
+  const handleCourseStudy = (id: number) => {
     navigate(`/course-study/${id}`);
   };
   const handleRemoveFromWishlist = async (
     courseId: number,
-    e: React.MouseEvent
+    e: React.MouseEvent,
   ) => {
     e.stopPropagation();
     try {
@@ -94,7 +78,7 @@ const handleCourseStudy = (id: number) => {
 
   const renderCourseCard = (
     course: ICourse,
-    type: "purchased" | "wishlist"
+    type: "purchased" | "wishlist",
   ) => {
     const isPurchased = type === "purchased";
     const progress = isPurchased ? Math.floor(Math.random() * 100) : 0;
@@ -103,9 +87,9 @@ const handleCourseStudy = (id: number) => {
       <div
         key={course.id}
         className="course-card"
-      //  onClick={() => navigate(`/course-detail/${course.id}`)}
+        //  onClick={() => navigate(`/course-detail/${course.id}`)}
       >
-        <div className="card-image-wrapper"> 
+        <div className="card-image-wrapper">
           <img
             src={
               course.image ||
@@ -220,7 +204,7 @@ const handleCourseStudy = (id: number) => {
         <div className="course-grid">
           {purchasedCourses.length > 0 ? (
             purchasedCourses.map((course) =>
-              renderCourseCard(course, "purchased")
+              renderCourseCard(course, "purchased"),
             )
           ) : (
             <div
@@ -255,7 +239,7 @@ const handleCourseStudy = (id: number) => {
         <div className="course-grid">
           {wishlistCourses.length > 0 ? (
             wishlistCourses.map((course) =>
-              renderCourseCard(course, "wishlist")
+              renderCourseCard(course, "wishlist"),
             )
           ) : (
             <div
@@ -297,7 +281,7 @@ const handleCourseStudy = (id: number) => {
             <Spin size="large" tip="Đang tải dữ liệu..." />
           </div>
         ) : (
-          <Tabs defaultActiveKey="purchased" items={items} />
+          <Tabs defaultActiveKey="wishlist" items={items} />
         )}
       </div>
     </div>

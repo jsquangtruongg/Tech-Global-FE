@@ -36,6 +36,7 @@ import SettingClientPage from "../page/Client/Setting";
 import ContactClientPage from "../page/Client/Contact";
 import FundPage from "../page/Client/Fund";
 import TraderDNAPage from "../page/Client/Trader-DNA";
+import ForgotPasswordPage from "../page/Auth/Forgot-Password";
 const router = createBrowserRouter([
   {
     element: <HeaderLayout />,
@@ -139,6 +140,10 @@ const router = createBrowserRouter([
       {
         element: <LoginPage />,
         path: "/login",
+      },
+      {
+        element: <ForgotPasswordPage />,
+        path: "/forgot-password",
       },
     ],
   },

@@ -1,5 +1,6 @@
 import "./style.scss";
 import { useEffect, useMemo, useState } from "react";
+import { message } from "antd";
 import ScheduleIcon from "@mui/icons-material/Schedule";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import StarIcon from "@mui/icons-material/Star";
@@ -29,7 +30,7 @@ const RegisterStudyComponent = () => {
   const [messageErrorCoupon, setMessageErrorCoupon] = useState("");
   const couponValid = useMemo(
     () => coupon.trim().toLowerCase() === "tech10",
-    [coupon]
+    [coupon],
   );
   const total = useMemo(() => {
     const base = course?.price || 0;
@@ -57,10 +58,11 @@ const RegisterStudyComponent = () => {
           return;
         }
       }
-      // Fallback: nếu không có url, điều hướng tới trang payment
-      navigate("/payment");
+      message.error("Không thể tạo liên kết thanh toán. Vui lòng thử lại sau.");
     } catch (e) {
-      navigate("/payment");
+      message.error(
+        "Đã xảy ra lỗi khi xử lý thanh toán. Vui lòng thử lại sau.",
+      );
     }
   };
 
@@ -167,7 +169,7 @@ const RegisterStudyComponent = () => {
               <div className="plan-price">
                 {Math.round(
                   (course?.price || 0) *
-                    (1 - (course?.discount ? course?.discount : 0) / 100)
+                    (1 - (course?.discount ? course?.discount : 0) / 100),
                 ).toLocaleString("vi-VN")}
                 đ
               </div>
@@ -365,7 +367,7 @@ const RegisterStudyComponent = () => {
               <span className="order-value">
                 {Math.round(
                   (course?.price || 0) *
-                    (1 - (course?.discount ? course?.discount : 0) / 100)
+                    (1 - (course?.discount ? course?.discount : 0) / 100),
                 ).toLocaleString("vi-VN")}
                 đ
               </span>
