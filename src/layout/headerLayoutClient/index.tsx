@@ -17,6 +17,8 @@ import {
   LogoutOutlined,
   ApiOutlined,
   MenuOutlined,
+  InfoCircleOutlined,
+  QuestionCircleOutlined,
 } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { postUserActivityAPI } from "../../api/analytics";
@@ -188,11 +190,20 @@ const HeaderLayout = () => {
   const handleClickContact = () => {
     navigate("/contact");
   };
+  const handleClickAbout = () => {
+    navigate("/about-me");
+  };
+  const handleClickHelp = () => {
+    navigate("/contact");
+  };
   const handleClickFund = () => {
     navigate("/fund");
   };
   const handleClickTraderDNA = () => {
     navigate("/trader-dna");
+  };
+  const handleClickAboutMe = () => {
+    navigate("/about-me");
   };
   return (
     <>
@@ -298,11 +309,26 @@ const HeaderLayout = () => {
               >
                 <p>Bài viết</p>
               </div>
-              <div
-                className="header-layout-right__item"
-                onClick={handleClickContact}
-              >
+              <div className="header-layout-right__item contact">
                 <p>Liên hệ</p>
+                <div className="contact-dropdown">
+                  <div className="contact-list">
+                    <div className="contact-item" onClick={handleClickAboutMe}>
+                      <InfoCircleOutlined className="contact-icon" />
+                      <div className="contact-text">
+                        <p className="contact-title">Về chúng tôi</p>
+                        <p className="contact-desc">Tổng quan và định hướng</p>
+                      </div>
+                    </div>
+                    <div className="contact-item" onClick={handleClickHelp}>
+                      <QuestionCircleOutlined className="contact-icon" />
+                      <div className="contact-text">
+                        <p className="contact-title">Trợ giúp</p>
+                        <p className="contact-desc">Liên hệ và hỗ trợ</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             {user ? (
@@ -372,6 +398,12 @@ const HeaderLayout = () => {
           </div>
           <div className="mobile-menu-item" onClick={handleClickContact}>
             Liên hệ
+          </div>
+          <div className="mobile-menu-item" onClick={handleClickAbout}>
+            Về chúng tôi
+          </div>
+          <div className="mobile-menu-item" onClick={handleClickHelp}>
+            Trợ giúp
           </div>
           {user ? (
             <>

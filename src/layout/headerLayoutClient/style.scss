@@ -135,6 +135,61 @@
           }
         }
       }
+      .contact {
+        position: relative;
+      }
+      .contact:hover .contact-dropdown {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0px);
+        pointer-events: auto;
+      }
+      .contact-dropdown {
+        position: absolute;
+        top: 50px;
+        right: -120px;
+        width: 250px;
+        background-color: #f6f7fb;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        padding: 16px;
+        z-index: 1200;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(10px);
+        transition: all 0.2s ease-in-out;
+        .contact-list {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 12px;
+          .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 8px 0;
+            .contact-icon {
+              color: #4aaf52;
+              font-size: 20px;
+            }
+            .contact-text {
+              .contact-title {
+                margin: 0;
+                font-size: 15px;
+                font-family: "Inter", sans-serif;
+                color: #283136;
+              }
+              .contact-desc {
+                margin: 4px 0 0 0;
+                font-size: 13px;
+                font-family: "Inter", sans-serif;
+                font-weight: 400;
+                color: #93a1a9;
+                line-height: 1.4;
+              }
+            }
+          }
+        }
+      }
     }
     .header-layout-user {
       display: flex;

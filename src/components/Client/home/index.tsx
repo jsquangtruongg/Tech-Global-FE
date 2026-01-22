@@ -28,7 +28,9 @@ const HomeComponent = () => {
     };
     fetchPosts();
   }, []);
-
+  const handleClickAboutMe = () => {
+    navigate("/about-me");
+  };
   return (
     <>
       <div className="home">
@@ -124,7 +126,7 @@ const HomeComponent = () => {
                   mềm đáp ứng tốt nhu cầu phân tích trong nhiều lĩnh vực, góp
                   phần nâng cao năng suất làm việc và chất lượng quản lý.
                 </p>
-                <button className="btn-more">Xem thêm</button>
+                <button className="btn-more" onClick={handleClickAboutMe}>Xem thêm</button>
               </div>
             </div>
           </div>
