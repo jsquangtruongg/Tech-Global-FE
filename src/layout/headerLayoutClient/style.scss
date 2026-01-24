@@ -138,6 +138,70 @@
       .contact {
         position: relative;
       }
+      .library {
+        position: relative;
+      }
+      .library:hover .library-dropdown {
+        opacity: 1;
+        visibility: visible;
+        transform: translate(-50%, 0);
+        pointer-events: auto;
+      }
+      .library-dropdown {
+        position: absolute;
+        top: 50px;
+        left: 50%;
+        width: 820px;
+        background-color: #f6f7fb;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        padding: 20px;
+        z-index: 1200;
+        opacity: 0;
+        visibility: hidden;
+        transform: translate(-50%, 10px);
+        transition: all 0.2s ease-in-out;
+        .features-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 30px;
+          .features-section {
+            .section-title {
+              margin: 0 0 10px 0;
+              font-size: 14px;
+              font-family: "Inter", sans-serif;
+              font-weight: 600;
+              color: #b0b8bd;
+            }
+            .feature-item {
+              display: flex;
+              align-items: flex-start;
+              gap: 12px;
+              padding: 10px 0;
+              .feature-icon {
+                color: #4aaf52;
+                font-size: 22px;
+              }
+              .feature-text {
+                .feature-title {
+                  margin: 0;
+                  font-size: 15px;
+                  font-family: "Inter", sans-serif;
+                  color: #283136;
+                }
+                .feature-desc {
+                  margin: 4px 0 0 0;
+                  font-size: 13px;
+                  font-family: "Inter", sans-serif;
+                  font-weight: 400;
+                  color: #93a1a9;
+                  line-height: 1.4;
+                }
+              }
+            }
+          }
+        }
+      }
       .contact:hover .contact-dropdown {
         opacity: 1;
         visibility: visible;

@@ -1,0 +1,54 @@
+.strategies {
+  padding: 24px 70px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.strategies__intro {
+  margin-bottom: 16px;
+}
+
+.strategy-card {
+  border-radius: 12px;
+}
+
+.st-section {
+  margin-top: 16px;
+}
+
+.st-inline {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  color: #374151;
+}
+
+.st-sub {
+  margin-top: 8px;
+  color: #374151;
+}
+
+.st-example .ant-typography {
+  margin: 0;
+}
+
+.st-actions {
+  margin-top: 12px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.st-empty {
+  margin-top: 24px;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+}
+
+@media (max-width: 992px) {
+  .strategies {
+    padding: 16px;
+  }
+}

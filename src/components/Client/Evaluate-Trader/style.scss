@@ -1,0 +1,39 @@
+.evaluate-trader {
+  padding: 24px 70px;
+  max-width: 1200px;
+  margin: 0 auto;
+  .evaluate-trader__header {
+    text-align: center;
+    .subtitle {
+      color: #6b7280;
+      margin-top: 8px;
+    }
+  }
+  .score-card {
+    border-radius: 12px;
+    .score-info {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      .level {
+        color: #283136;
+        font-weight: 600;
+      }
+      .guide {
+        color: #93a1a9;
+      }
+    }
+  }
+  .metric-card {
+    border-radius: 12px;
+    .points {
+      color: #4aaf52;
+      margin-left: 6px;
+    }
+  }
+}
+@media (max-width: 992px) {
+  .evaluate-trader {
+    padding: 16px;
+  }
+}
