@@ -19,6 +19,15 @@ import {
   MenuOutlined,
   InfoCircleOutlined,
   QuestionCircleOutlined,
+  ReadOutlined,
+  BulbOutlined,
+  ProfileOutlined,
+  FileTextOutlined,
+  WarningOutlined,
+  CheckSquareOutlined,
+  SmileOutlined,
+  EditOutlined,
+  DashboardOutlined,
 } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { postUserActivityAPI } from "../../api/analytics";
@@ -205,6 +214,33 @@ const HeaderLayout = () => {
   const handleClickAboutMe = () => {
     navigate("/about-me");
   };
+  const handleClickTraderAssessment = () => {
+    navigate("/library/trader-assessment");
+  };
+  const handleClickLearningPath = () => {
+    navigate("/library/learning-path");
+  };
+  const handleClickKnowledgeLibrary = () => {
+    navigate("/library/knowledge");
+  };
+  const handleClickStrategyLibrary = () => {
+    navigate("/library/strategies");
+  };
+  const handleClickCommonErrors = () => {
+    navigate("/library/common-errors");
+  };
+  const handleClickChecklist = () => {
+    navigate("/library/checklist");
+  };
+  const handleClickPsychology = () => {
+    navigate("/library/psychology");
+  };
+  const handleClickEmotionJournal = () => {
+    navigate("/library/emotion-journal");
+  };
+  const handleClickDisciplineIndex = () => {
+    navigate("/library/discipline-index");
+  };
   return (
     <>
       <div className="header-layout">
@@ -221,6 +257,7 @@ const HeaderLayout = () => {
               >
                 <p>Trang chủ</p>
               </div>
+
               <div className="header-layout-right__item features">
                 <p>Tính năng</p>
                 <div className="features-dropdown">
@@ -296,6 +333,135 @@ const HeaderLayout = () => {
                           <p className="feature-title">API</p>
                           <p className="feature-desc">
                             Tích hợp nhanh với hệ thống của bạn
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="header-layout-right__item library">
+                <p>Thư viện</p>
+                <div className="library-dropdown">
+                  <div className="features-grid">
+                    <div className="features-section">
+                      <p className="section-title">HỌC TẬP & KIẾN THỨC</p>
+                      <div
+                        className="feature-item"
+                        onClick={handleClickTraderAssessment}
+                      >
+                        <ReadOutlined className="feature-icon" />
+                        <div className="feature-text">
+                          <p className="feature-title">
+                            Đánh Giá Trình Độ Trader
+                          </p>
+                          <p className="feature-desc">
+                            Xác định cấp độ và lộ trình phù hợp
+                          </p>
+                        </div>
+                      </div>
+                      <div
+                        className="feature-item"
+                        onClick={handleClickLearningPath}
+                      >
+                        <ProfileOutlined className="feature-icon" />
+                        <div className="feature-text">
+                          <p className="feature-title">Lộ Trình Học Trading</p>
+                          <p className="feature-desc">
+                            Hệ thống các bước từ cơ bản đến nâng cao
+                          </p>
+                        </div>
+                      </div>
+                      <div
+                        className="feature-item"
+                        onClick={handleClickKnowledgeLibrary}
+                      >
+                        <FileTextOutlined className="feature-icon" />
+                        <div className="feature-text">
+                          <p className="feature-title">Thư Viện Kiến Thức</p>
+                          <p className="feature-desc">
+                            Tổng hợp khái niệm, mô hình và quy tắc
+                          </p>
+                        </div>
+                      </div>
+                      <div
+                        className="feature-item"
+                        onClick={handleClickStrategyLibrary}
+                      >
+                        <BulbOutlined className="feature-icon" />
+                        <div className="feature-text">
+                          <p className="feature-title">
+                            Kho Chiến Lược Giao Dịch
+                          </p>
+                          <p className="feature-desc">
+                            Chiến lược được kiểm chứng và tối ưu
+                          </p>
+                        </div>
+                      </div>
+                      <div
+                        className="feature-item"
+                        onClick={handleClickCommonErrors}
+                      >
+                        <WarningOutlined className="feature-icon" />
+                        <div className="feature-text">
+                          <p className="feature-title">
+                            Thư Viện Lỗi Thường Gặp
+                          </p>
+                          <p className="feature-desc">
+                            Những sai lầm phổ biến và cách khắc phục
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="features-section">
+                      <p className="section-title">KỶ LUẬT & TÂM LÝ</p>
+                      <div
+                        className="feature-item"
+                        onClick={handleClickChecklist}
+                      >
+                        <CheckSquareOutlined className="feature-icon" />
+                        <div className="feature-text">
+                          <p className="feature-title">Checklist Vào Lệnh</p>
+                          <p className="feature-desc">
+                            Quy trình vào lệnh rõ ràng, nhất quán
+                          </p>
+                        </div>
+                      </div>
+                      <div
+                        className="feature-item"
+                        onClick={handleClickPsychology}
+                      >
+                        <SmileOutlined className="feature-icon" />
+                        <div className="feature-text">
+                          <p className="feature-title">
+                            Quản Lý Tâm Lý Giao Dịch
+                          </p>
+                          <p className="feature-desc">
+                            Cân bằng cảm xúc, hạn chế sai lệch nhận thức
+                          </p>
+                        </div>
+                      </div>
+                      <div
+                        className="feature-item"
+                        onClick={handleClickEmotionJournal}
+                      >
+                        <EditOutlined className="feature-icon" />
+                        <div className="feature-text">
+                          <p className="feature-title">Nhật Ký Cảm Xúc</p>
+                          <p className="feature-desc">
+                            Theo dõi tâm trạng và quyết định giao dịch
+                          </p>
+                        </div>
+                      </div>
+                      <div
+                        className="feature-item"
+                        onClick={handleClickDisciplineIndex}
+                      >
+                        <DashboardOutlined className="feature-icon" />
+                        <div className="feature-text">
+                          <p className="feature-title">Chỉ Số Kỷ Luật</p>
+                          <p className="feature-desc">
+                            Đo lường mức độ tuân thủ kế hoạch
                           </p>
                         </div>
                       </div>
@@ -392,6 +558,47 @@ const HeaderLayout = () => {
           </div>
           <div className="mobile-menu-item" onClick={handleClickFund}>
             Quỹ Giao Dịch Uy Tín
+          </div>
+          <div className="mobile-menu-section-title">Thư viện</div>
+          <div
+            className="mobile-menu-item"
+            onClick={handleClickTraderAssessment}
+          >
+            Đánh Giá Trình Độ Trader
+          </div>
+          <div className="mobile-menu-item" onClick={handleClickLearningPath}>
+            Lộ Trình Học Trading
+          </div>
+          <div
+            className="mobile-menu-item"
+            onClick={handleClickKnowledgeLibrary}
+          >
+            Thư Viện Kiến Thức
+          </div>
+          <div
+            className="mobile-menu-item"
+            onClick={handleClickStrategyLibrary}
+          >
+            Kho Chiến Lược Giao Dịch
+          </div>
+          <div className="mobile-menu-item" onClick={handleClickCommonErrors}>
+            Thư Viện Lỗi Thường Gặp
+          </div>
+          <div className="mobile-menu-section-title">Kỷ luật & Tâm lý</div>
+          <div className="mobile-menu-item" onClick={handleClickChecklist}>
+            Checklist Vào Lệnh
+          </div>
+          <div className="mobile-menu-item" onClick={handleClickPsychology}>
+            Quản Lý Tâm Lý Giao Dịch
+          </div>
+          <div className="mobile-menu-item" onClick={handleClickEmotionJournal}>
+            Nhật Ký Cảm Xúc
+          </div>
+          <div
+            className="mobile-menu-item"
+            onClick={handleClickDisciplineIndex}
+          >
+            Chỉ Số Kỷ Luật
           </div>
           <div className="mobile-menu-item" onClick={handleClickBlog}>
             Bài viết

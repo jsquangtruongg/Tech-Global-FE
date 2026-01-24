@@ -38,6 +38,12 @@ import FundPage from "../page/Client/Fund";
 import TraderDNAPage from "../page/Client/Trader-DNA";
 import ForgotPasswordPage from "../page/Auth/Forgot-Password";
 import AboutMePage from "../page/Client/About-me";
+import EvaluateTraderPage from "../page/Client/Evaluate-Trader";
+import LearningPatPage from "../page/Client/Learning-Path";
+import KnowledgePage from "../page/Client/Knowledge";
+import KnowledgeDetailPage from "../page/Client/Knowledge-Detail";
+import StrategiesPage from "../page/Client/Strategies";
+import CommonErrorsPage from "../page/Client/Common-Errors";
 const router = createBrowserRouter([
   {
     element: <HeaderLayout />,
@@ -130,6 +136,30 @@ const router = createBrowserRouter([
       {
         element: <AboutMePage />,
         path: "/about-me",
+      },
+      {
+        element: <EvaluateTraderPage />,
+        path: "/library/trader-assessment",
+      },
+      {
+        element: <LearningPatPage />,
+        path: "/library/learning-path",
+      },
+      {
+        element: <KnowledgePage />,
+        path: "/library/knowledge",
+      },
+      {
+        element: <KnowledgeDetailPage />,
+        path: "/library/knowledge-detail/:id",
+      },
+      {
+        element: <StrategiesPage />,
+        path: "/library/strategies",
+      },
+      {
+        element: <CommonErrorsPage />,
+        path: "/library/common-errors",
       },
     ],
   },
