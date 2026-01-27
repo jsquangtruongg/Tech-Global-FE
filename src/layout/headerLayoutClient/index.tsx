@@ -29,13 +29,14 @@ import {
   EditOutlined,
   DashboardOutlined,
 } from "@ant-design/icons";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { postUserActivityAPI } from "../../api/analytics";
 
 const HeaderLayout = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState<any>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const activitySentRef = useRef<boolean>(false);
 
   useEffect(() => {
     const profile = localStorage.getItem("profile");
@@ -45,6 +46,10 @@ const HeaderLayout = () => {
   }, []);
 
   useEffect(() => {
+    const sentKey = "tg_user_activity_sent";
+    try {
+      activitySentRef.current = sessionStorage.getItem(sentKey) === "1";
+    } catch {}
     const getDeviceInfo = () => {
       const ua = navigator.userAgent || "";
       const isMobile = /Mobi|Android/i.test(ua);
@@ -77,13 +82,20 @@ const HeaderLayout = () => {
         "tg_user_last_active",
         JSON.stringify({ id, ts: ev.t, device, os, browser }),
       );
-      postUserActivityAPI({
-        userId: id,
-        timestamp: new Date(ev.t).toISOString(),
-        device,
-        os,
-        browser,
-      });
+      if (!activitySentRef.current) {
+        postUserActivityAPI({
+          userId: id,
+          timestamp: new Date(ev.t).toISOString(),
+          device,
+          os,
+          browser,
+        }).finally(() => {
+          activitySentRef.current = true;
+          try {
+            sessionStorage.setItem(sentKey, "1");
+          } catch {}
+        });
+      }
     };
 
     const handleActivity = () => {

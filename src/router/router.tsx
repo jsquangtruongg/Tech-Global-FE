@@ -44,11 +44,20 @@ import KnowledgePage from "../page/Client/Knowledge";
 import KnowledgeDetailPage from "../page/Client/Knowledge-Detail";
 import StrategiesPage from "../page/Client/Strategies";
 import CommonErrorsPage from "../page/Client/Common-Errors";
+import ChecklistPage from "../page/Client/Checklist";
+import PsychologyPage from "../page/Client/Psychology";
+import PsychologyDetailPage from "../page/Client/Psychology-Detail";
+import PsychologyAdminPage from "../page/Admin/Psychology";
+import FeelingAdminPage from "../page/Admin/Feeling";
 const router = createBrowserRouter([
   {
     element: <HeaderLayout />,
     path: "/",
     children: [
+      {
+        index: true,
+        element: <HomeComponent />,
+      },
       {
         element: <HomeComponent />,
         path: "/home",
@@ -161,6 +170,18 @@ const router = createBrowserRouter([
         element: <CommonErrorsPage />,
         path: "/library/common-errors",
       },
+      {
+        element: <ChecklistPage />,
+        path: "/library/checklist",
+      },
+      {
+        element: <PsychologyPage />,
+        path: "/library/psychology",
+      },
+      {
+        element: <PsychologyDetailPage />,
+        path: "/library/psychology-detail/:id",
+      },
     ],
   },
 
@@ -249,6 +270,14 @@ const router = createBrowserRouter([
       {
         element: <BotTradeProductAdminPage />,
         path: "bot-products",
+      },
+      {
+        element: <PsychologyAdminPage />,
+        path: "psychology",
+      },
+      {
+        element: <FeelingAdminPage />,
+        path: "/admin/analytics/feeling",
       },
     ],
   },
