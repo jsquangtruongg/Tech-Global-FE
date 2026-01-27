@@ -1,0 +1,83 @@
+.checklist {
+  padding: 24px 70px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.cl-alert {
+  margin-bottom: 12px;
+}
+
+.cl-head {
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+.cl-head__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cl-head__controls {
+  margin-top: 12px;
+}
+
+.cl-field {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  align-items: center;
+  gap: 8px;
+}
+
+.cl-progress {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  align-items: center;
+  gap: 12px;
+}
+
+.cl-block {
+  border-radius: 12px;
+}
+
+.cl-item-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cl-actions {
+  margin-top: 16px;
+  display: flex;
+  justify-content: space-between;
+}
+
+@media (max-width: 992px) {
+  .checklist {
+    padding: 16px;
+  }
+  .cl-field {
+    grid-template-columns: 1fr;
+  }
+  .cl-progress {
+    grid-template-columns: 1fr;
+  }
+  .cl-actions {
+    justify-content: flex-start;
+  }
+  .cl-actions .ant-space {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .cl-actions .ant-space .ant-space-item {
+    width: 100%;
+  }
+  .cl-actions .ant-space .ant-space-item button {
+    width: 100%;
+  }
+}

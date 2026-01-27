@@ -20,7 +20,7 @@ const NavBarLayout = () => {
 
   const toggleOpen = (key: string) => {
     setOpenKeys((prev) =>
-      prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]
+      prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key],
     );
   };
 
@@ -82,9 +82,30 @@ const NavBarLayout = () => {
       ],
     },
     {
-      key: "/admin/analytics",
-      icon: <BarChartOutlined />,
+      key: "psychology",
+      icon: <TeamOutlined />,
+      label: "Thư viện",
+      children: [
+        {
+          key: "/admin/psychology",
+          label: "Thư viện tâm lý",
+        },
+      ],
+    },
+    {
+      key: "analysis",
+      icon: <TeamOutlined />,
       label: "Phân tích",
+      children: [
+        {
+          key: "/admin/analytics",
+          label: "Phân tích thói quen",
+        },
+        {
+          key: "/admin/analytics/feeling",
+          label: "Phân tích tâm lý",
+        },
+      ],
     },
     {
       key: "/admin/post-new",
@@ -114,7 +135,7 @@ const NavBarLayout = () => {
               location.pathname === item.key ||
               (hasChildren &&
                 item.children?.some(
-                  (child) => location.pathname === child.key
+                  (child) => location.pathname === child.key,
                 ));
 
             return (

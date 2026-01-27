@@ -1,0 +1,44 @@
+.psychology-detail {
+  padding: 16px 150px;
+}
+
+.pd-card.empty {
+  text-align: center;
+  padding: 32px 0;
+}
+
+.pd-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.pd-summary {
+  color: #555;
+  margin-bottom: 12px;
+}
+
+.pd-section {
+  margin: 12px 0;
+  img {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+.pd-list {
+  margin: 8px 0 0 18px;
+  padding: 0;
+  li {
+    color: #444;
+    margin-bottom: 4px;
+  }
+}
+
+.pd-actions {
+  margin-top: 12px;
+}
