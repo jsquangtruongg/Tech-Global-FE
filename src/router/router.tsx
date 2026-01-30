@@ -49,6 +49,8 @@ import PsychologyPage from "../page/Client/Psychology";
 import PsychologyDetailPage from "../page/Client/Psychology-Detail";
 import PsychologyAdminPage from "../page/Admin/Psychology";
 import FeelingAdminPage from "../page/Admin/Feeling";
+import EmotionJournalPage from "../page/Client/Emotion-Journal";
+import KnowledgeAdminPage from "../page/Admin/Knowledge";
 const router = createBrowserRouter([
   {
     element: <HeaderLayout />,
@@ -182,6 +184,10 @@ const router = createBrowserRouter([
         element: <PsychologyDetailPage />,
         path: "/library/psychology-detail/:id",
       },
+      {
+        element: <EmotionJournalPage />,
+        path: "/library/emotion-journal",
+      },
     ],
   },
 
@@ -278,6 +284,10 @@ const router = createBrowserRouter([
       {
         element: <FeelingAdminPage />,
         path: "/admin/analytics/feeling",
+      },
+      {
+        element: <KnowledgeAdminPage />,
+        path: "/admin/knowledge",
       },
     ],
   },

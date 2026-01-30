@@ -35,8 +35,6 @@ type Article = {
   summary: string;
   level: Level;
   tags: string[];
-  checklist?: string[];
-  related?: string[];
   quiz?: {
     q: string;
     options: string[];
@@ -50,11 +48,9 @@ const ARTICLES: Article[] = [
     topic: "METHODS",
     title: "Price Action",
     summary:
-      "Phương pháp đọc hành động giá để xác định xu hướng, vùng phản ứng và xác suất vào lệnh.",
+      "Phương pháp đọc hành động giá để xác định xu hướng, vùng phản ứng ",
     level: "BASIC",
     tags: ["Quan trọng", "Bắt buộc phải biết"],
-    checklist: ["Xác định xu hướng", "Kiểm tra vùng S/R", "Tìm tín hiệu nến"],
-    related: ["Pin Bar", "Inside Bar"],
     quiz: [
       {
         q: "Price Action là gì?",
@@ -80,12 +76,48 @@ const ARTICLES: Article[] = [
     summary: "Đi theo xu hướng chính, bỏ qua nhiễu nhỏ để tối ưu RR.",
     level: "BASIC",
     tags: ["Quan trọng"],
-    checklist: [
-      "Xác định Higher High/Lower Low",
-      "Đi theo hướng trend",
-      "Không bắt đỉnh/đáy",
+    quiz: [
+      {
+        q: "Dấu hiệu có xu hướng?",
+        options: ["Higher High/Low", "Doji liên tục"],
+        answer: 0,
+      },
+      { q: "Nên làm gì?", options: ["Bắt đỉnh", "Đi theo trend"], answer: 1 },
+      {
+        q: "Khi nào không nên dùng?",
+        options: ["Sideway mạnh", "Có trend rõ"],
+        answer: 0,
+      },
     ],
-    related: ["EMA", "MACD"],
+  },
+  {
+    id: "trend-following",
+    topic: "METHODS",
+    title: "Trend Following",
+    summary: "Đi theo xu hướng chính, bỏ qua nhiễu nhỏ để tối ưu RR.",
+    level: "BASIC",
+    tags: ["Quan trọng"],
+    quiz: [
+      {
+        q: "Dấu hiệu có xu hướng?",
+        options: ["Higher High/Low", "Doji liên tục"],
+        answer: 0,
+      },
+      { q: "Nên làm gì?", options: ["Bắt đỉnh", "Đi theo trend"], answer: 1 },
+      {
+        q: "Khi nào không nên dùng?",
+        options: ["Sideway mạnh", "Có trend rõ"],
+        answer: 0,
+      },
+    ],
+  },
+  {
+    id: "trend-following",
+    topic: "METHODS",
+    title: "Trend Following",
+    summary: "Đi theo xu hướng chính, bỏ qua nhiễu nhỏ để tối ưu RR.",
+    level: "BASIC",
+    tags: ["Quan trọng"],
     quiz: [
       {
         q: "Dấu hiệu có xu hướng?",
@@ -107,12 +139,6 @@ const ARTICLES: Article[] = [
     summary: "Nỗi sợ bỏ lỡ khiến vào lệnh không theo kế hoạch.",
     level: "BASIC",
     tags: ["Dễ sai"],
-    checklist: [
-      "Chờ tín hiệu đủ điều kiện",
-      "Tuân thủ checklist",
-      "Giới hạn số lệnh/ngày",
-    ],
-    related: ["Checklist vào lệnh", "Nhật ký cảm xúc"],
     quiz: [
       {
         q: "FOMO thường dẫn tới?",
@@ -138,12 +164,6 @@ const ARTICLES: Article[] = [
     summary: "Xác định tỷ lệ rủi ro cố định cho mỗi giao dịch.",
     level: "BASIC",
     tags: ["Quan trọng"],
-    checklist: [
-      "Giới hạn 0.5–2%/lệnh",
-      "Đặt SL mọi lệnh",
-      "Tính RR trước khi vào",
-    ],
-    related: ["RR", "Drawdown"],
     quiz: [
       {
         q: "Risk per trade là?",
@@ -161,8 +181,6 @@ const ARTICLES: Article[] = [
     summary: "Nến bóng dài cho thấy sự từ chối giá mạnh ở vùng S/R.",
     level: "BASIC",
     tags: ["Quan trọng"],
-    checklist: ["Xuất hiện ở vùng S/R", "Bóng dài rõ rệt", "Xác nhận thêm"],
-    related: ["Supply/Demand", "Price Action"],
     quiz: [
       {
         q: "Pin Bar hợp lệ khi?",
@@ -181,12 +199,6 @@ const ARTICLES: Article[] = [
       "Đường trung bình động nhấn mạnh giá gần đây, hỗ trợ xác định xu hướng.",
     level: "BASIC",
     tags: ["Quan trọng"],
-    checklist: [
-      "Kết hợp Price Action",
-      "Không dùng độc lập",
-      "Thông số phổ biến 20/50/200",
-    ],
-    related: ["Trend Following", "MACD"],
     quiz: [
       {
         q: "EMA dùng để?",
@@ -287,7 +299,7 @@ const KnowledgeComponent = () => {
 
       <Row gutter={[24, 24]}>
         {filtered.map((a) => (
-          <Col xs={24} md={12} lg={8} key={a.id}>
+          <Col xs={24} md={12} lg={6} xl={6} xxl={6} key={a.id}>
             <Card
               className="kl-article"
               title={a.title}
@@ -316,23 +328,7 @@ const KnowledgeComponent = () => {
                   </Tag>
                 ))}
               </div>
-              <Space direction="vertical" size={8} style={{ width: "100%" }}>
-                {a.checklist && (
-                  <div className="kl-section">
-                    <strong>Nên làm:</strong>
-                    <ul>
-                      {a.checklist.map((c) => (
-                        <li key={c}>{c}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-                {a.related && (
-                  <div className="kl-section">
-                    <strong>Liên kết:</strong> {a.related.join(" • ")}
-                  </div>
-                )}
-              </Space>
+
               <Space
                 style={{
                   marginTop: 30,
@@ -356,7 +352,7 @@ const KnowledgeComponent = () => {
         <Card className="kl-empty">
           <Empty description="Chưa cập nhật" />
         </Card>
-      )} 
+      )}
       <Modal
         title={`Kiểm tra nhanh: ${quizArticle?.title || ""}`}
         open={quizOpen}

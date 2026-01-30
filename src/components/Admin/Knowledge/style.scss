@@ -1,0 +1,138 @@
+.page-header {
+  margin-bottom: 12px;
+  h1 {
+    margin: 0 0 4px 0;
+    font-size: 22px;
+    font-weight: 600;
+  }
+  p {
+    color: #666;
+    margin: 0;
+  }
+}
+
+.kl-toolbar {
+  margin-bottom: 16px;
+}
+
+.knowledge-admin {
+  .ant-btn {
+    box-shadow: none !important;
+  }
+  .ant-btn-default,
+  .ant-btn-variant-outlined {
+    border-color: transparent !important;
+    box-shadow: none !important;
+    background: transparent;
+  }
+  .ant-btn-dangerous {
+    border-color: transparent !important;
+    box-shadow: none !important;
+    background: transparent;
+  }
+  .ant-btn-color-dangerous {
+    border-color: transparent !important;
+    box-shadow: none !important;
+    background: transparent;
+  }
+
+  .btn-edit,
+  .btn-edit:hover,
+  .btn-edit:focus {
+    color: #faad14 !important;
+  }
+}
+
+.tiptap-box {
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  background: #fff;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  &:focus-within {
+    border-color: #4096ff;
+    box-shadow: 0 0 0 2px rgba(5, 145, 255, 0.1);
+  }
+}
+
+.tiptap-toolbar {
+  border-bottom: 1px solid #f0f0f0;
+  padding: 8px;
+  background: #fff;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  .toolbar-divider {
+    width: 1px;
+    background-color: #f0f0f0;
+    margin: 0 4px;
+    height: 24px;
+    align-self: center;
+  }
+  .toolbar-btn {
+    min-width: 32px;
+    height: 32px;
+    padding: 0 4px;
+    color: #666;
+    border: none;
+  }
+  .toolbar-btn.active {
+    color: #1677ff;
+  }
+  .ant-btn-primary {
+    background: transparent;
+    box-shadow: none;
+    border: none;
+    color: #1677ff;
+  }
+  .ant-btn-primary:hover,
+  .ant-btn-primary:focus {
+    background: transparent;
+    box-shadow: none;
+    color: #1677ff;
+  }
+}
+
+.tiptap-editor {
+  padding: 12px;
+  min-height: 240px;
+  .tiptap-content {
+    outline: none;
+  }
+  img {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    height: auto;
+  }
+  p.is-editor-empty::before {
+    content: attr(data-placeholder);
+    color: #bfbfbf;
+    pointer-events: none;
+    height: 0;
+    float: left;
+    outline: none;
+  }
+}
+.ProseMirror {
+  outline: none;
+}
+.bubble-menu {
+  display: flex;
+  gap: 6px;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  padding: 8px;
+}
+
+.floating-menu {
+  display: flex;
+  gap: 6px;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  padding: 8px;
+}

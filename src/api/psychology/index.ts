@@ -56,3 +56,24 @@ export const deletePsychologyAPI = async (id: number): Promise<IResponse> => {
   const { data } = await API.delete(`/psychology/${id}`);
   return data;
 };
+
+export const getSavedPsychologyAPI = async (
+  params: any = {},
+): Promise<IResponse> => {
+  const { data } = await API.get("/psychology/saved", { params });
+  return data;
+};
+
+export const addSavedPsychologyAPI = async (
+  psychology_id: number,
+): Promise<IResponse> => {
+  const { data } = await API.post("/psychology/saved", { psychology_id });
+  return data;
+};
+
+export const deleteSavedPsychologyAPI = async (
+  savedId: number,
+): Promise<IResponse> => {
+  const { data } = await API.delete(`/psychology/saved/${savedId}`);
+  return data;
+};

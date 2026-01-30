@@ -90,6 +90,10 @@ const NavBarLayout = () => {
           key: "/admin/psychology",
           label: "Thư viện tâm lý",
         },
+        {
+          key: "/admin/knowledge",
+          label: "Thư viện kiến thức",
+        },
       ],
     },
     {
