@@ -16,6 +16,8 @@ import {
   Empty,
 } from "antd";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { getAllKnowledgeAPI } from "../../../api/knowledge";
 
 const { Title, Paragraph } = Typography;
 
@@ -33,6 +35,7 @@ type Article = {
   topic: TopicKey;
   title: string;
   summary: string;
+  content?: string;
   level: Level;
   tags: string[];
   quiz?: {
@@ -42,174 +45,7 @@ type Article = {
   }[];
 };
 
-const ARTICLES: Article[] = [
-  {
-    id: "price-action",
-    topic: "METHODS",
-    title: "Price Action",
-    summary:
-      "Phương pháp đọc hành động giá để xác định xu hướng, vùng phản ứng ",
-    level: "BASIC",
-    tags: ["Quan trọng", "Bắt buộc phải biết"],
-    quiz: [
-      {
-        q: "Price Action là gì?",
-        options: ["Chỉ báo", "Hành động giá"],
-        answer: 1,
-      },
-      {
-        q: "Cần kết hợp gì?",
-        options: ["S/R", "Khối lượng", "Cả hai"],
-        answer: 2,
-      },
-      {
-        q: "Nên dùng khi?",
-        options: ["Thị trường có xu hướng", "Luôn luôn"],
-        answer: 0,
-      },
-    ],
-  },
-  {
-    id: "trend-following",
-    topic: "METHODS",
-    title: "Trend Following",
-    summary: "Đi theo xu hướng chính, bỏ qua nhiễu nhỏ để tối ưu RR.",
-    level: "BASIC",
-    tags: ["Quan trọng"],
-    quiz: [
-      {
-        q: "Dấu hiệu có xu hướng?",
-        options: ["Higher High/Low", "Doji liên tục"],
-        answer: 0,
-      },
-      { q: "Nên làm gì?", options: ["Bắt đỉnh", "Đi theo trend"], answer: 1 },
-      {
-        q: "Khi nào không nên dùng?",
-        options: ["Sideway mạnh", "Có trend rõ"],
-        answer: 0,
-      },
-    ],
-  },
-  {
-    id: "trend-following",
-    topic: "METHODS",
-    title: "Trend Following",
-    summary: "Đi theo xu hướng chính, bỏ qua nhiễu nhỏ để tối ưu RR.",
-    level: "BASIC",
-    tags: ["Quan trọng"],
-    quiz: [
-      {
-        q: "Dấu hiệu có xu hướng?",
-        options: ["Higher High/Low", "Doji liên tục"],
-        answer: 0,
-      },
-      { q: "Nên làm gì?", options: ["Bắt đỉnh", "Đi theo trend"], answer: 1 },
-      {
-        q: "Khi nào không nên dùng?",
-        options: ["Sideway mạnh", "Có trend rõ"],
-        answer: 0,
-      },
-    ],
-  },
-  {
-    id: "trend-following",
-    topic: "METHODS",
-    title: "Trend Following",
-    summary: "Đi theo xu hướng chính, bỏ qua nhiễu nhỏ để tối ưu RR.",
-    level: "BASIC",
-    tags: ["Quan trọng"],
-    quiz: [
-      {
-        q: "Dấu hiệu có xu hướng?",
-        options: ["Higher High/Low", "Doji liên tục"],
-        answer: 0,
-      },
-      { q: "Nên làm gì?", options: ["Bắt đỉnh", "Đi theo trend"], answer: 1 },
-      {
-        q: "Khi nào không nên dùng?",
-        options: ["Sideway mạnh", "Có trend rõ"],
-        answer: 0,
-      },
-    ],
-  },
-  {
-    id: "fomo",
-    topic: "PSYCHOLOGY",
-    title: "FOMO",
-    summary: "Nỗi sợ bỏ lỡ khiến vào lệnh không theo kế hoạch.",
-    level: "BASIC",
-    tags: ["Dễ sai"],
-    quiz: [
-      {
-        q: "FOMO thường dẫn tới?",
-        options: ["Kỷ luật tốt", "Vào lệnh sai"],
-        answer: 1,
-      },
-      {
-        q: "Khắc phục?",
-        options: ["Không có kế hoạch", "Theo checklist"],
-        answer: 1,
-      },
-      {
-        q: "Dấu hiệu?",
-        options: ["Đợi setup đầy đủ", "Sợ bỏ lỡ nhảy vào"],
-        answer: 1,
-      },
-    ],
-  },
-  {
-    id: "risk-per-trade",
-    topic: "RISK",
-    title: "Risk % mỗi lệnh",
-    summary: "Xác định tỷ lệ rủi ro cố định cho mỗi giao dịch.",
-    level: "BASIC",
-    tags: ["Quan trọng"],
-    quiz: [
-      {
-        q: "Risk per trade là?",
-        options: ["Tỷ lệ lời", "Tỷ lệ lỗ tối đa"],
-        answer: 1,
-      },
-      { q: "Nên đặt SL?", options: ["Không cần", "Luôn cần"], answer: 1 },
-      { q: "Tối ưu?", options: ["All-in", "Giới hạn % cố định"], answer: 1 },
-    ],
-  },
-  {
-    id: "pin-bar",
-    topic: "CANDLESTICKS",
-    title: "Pin Bar",
-    summary: "Nến bóng dài cho thấy sự từ chối giá mạnh ở vùng S/R.",
-    level: "BASIC",
-    tags: ["Quan trọng"],
-    quiz: [
-      {
-        q: "Pin Bar hợp lệ khi?",
-        options: ["Giữa vùng", "Tại S/R rõ"],
-        answer: 1,
-      },
-      { q: "Ý nghĩa?", options: ["Do dự", "Từ chối giá"], answer: 1 },
-      { q: "Cần gì?", options: ["Xác nhận thêm", "Không cần"], answer: 0 },
-    ],
-  },
-  {
-    id: "ema",
-    topic: "INDICATORS",
-    title: "EMA",
-    summary:
-      "Đường trung bình động nhấn mạnh giá gần đây, hỗ trợ xác định xu hướng.",
-    level: "BASIC",
-    tags: ["Quan trọng"],
-    quiz: [
-      {
-        q: "EMA dùng để?",
-        options: ["Xác định xu hướng", "Đo khối lượng"],
-        answer: 0,
-      },
-      { q: "Dùng độc lập?", options: ["Nên", "Không nên"], answer: 1 },
-      { q: "Thông số phổ biến?", options: ["20/50/200", "5/7/9"], answer: 0 },
-    ],
-  },
-];
+// Không dùng dữ liệu giả; dữ liệu sẽ được nạp từ API
 
 const TOPIC_TABS: { key: TopicKey; label: string }[] = [
   { key: "METHODS", label: "Phương pháp" },
@@ -221,6 +57,7 @@ const TOPIC_TABS: { key: TopicKey; label: string }[] = [
 ];
 
 const KnowledgeComponent = () => {
+  const [data, setData] = useState<Article[]>([]);
   const [query, setQuery] = useState("");
   const [topic, setTopic] = useState<TopicKey>("METHODS");
   const [level, setLevel] = useState<Level | "ALL">("ALL");
@@ -230,8 +67,39 @@ const KnowledgeComponent = () => {
   const [answers, setAnswers] = useState<number[]>([]);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const fetchRemote = async () => {
+      try {
+        const res = await getAllKnowledgeAPI();
+        if (res.err === 0 && Array.isArray(res.data)) {
+          const mapped: Article[] = res.data.map((item: any) => ({
+            id: String(
+              item.id ||
+                item.slug ||
+                item.title?.toLowerCase()?.replace(/\s+/g, "-"),
+            ),
+            topic: item.topic || "METHODS",
+            title: String(item.title || ""),
+            summary: String(item.summary || ""),
+            content: String(item.content || ""),
+            level: item.level || "BASIC",
+            tags: Array.isArray(item.tags)
+              ? item.tags
+              : typeof item.tags === "string"
+                ? [item.tags]
+                : [],
+          }));
+          setData(mapped);
+        } else {
+          setData([]);
+        }
+      } catch {}
+    };
+    fetchRemote();
+  }, []);
+
   const filtered = useMemo(() => {
-    return ARTICLES.filter((a) => {
+    return data.filter((a) => {
       if (a.topic !== topic) return false;
       if (level !== "ALL" && a.level !== level) return false;
       if (tags.length && !tags.every((t) => a.tags.includes(t))) return false;
@@ -239,7 +107,7 @@ const KnowledgeComponent = () => {
         return false;
       return true;
     });
-  }, [query, topic, level, tags]);
+  }, [query, topic, level, tags, data]);
 
   const startQuiz = (article: Article) => {
     setQuizArticle(article);
@@ -336,7 +204,9 @@ const KnowledgeComponent = () => {
                   justifyContent: "space-between",
                 }}
               >
-                <Button onClick={() => startQuiz(a)}>Kiểm tra nhanh</Button>
+                {a.quiz && (
+                  <Button onClick={() => startQuiz(a)}>Kiểm tra nhanh</Button>
+                )}
                 <Button
                   type="primary"
                   onClick={() => handlerClickNavigateToDetail(a.id)}

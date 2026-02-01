@@ -50,6 +50,16 @@
   object-fit: cover;
 }
 
+.kd-content {
+  img {
+    max-width: 60%;
+    height: auto;
+    display: block;
+    border-radius: 8px;
+    margin: auto;
+  }
+}
+
 .kd-actions {
   margin-top: 24px;
   display: flex;
