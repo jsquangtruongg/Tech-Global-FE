@@ -44,13 +44,6 @@ import Placeholder from "@tiptap/extension-placeholder";
 import TaskList from "@tiptap/extension-task-list";
 import TaskItem from "@tiptap/extension-task-item";
 import {
-  getAllKnowledgeAPI,
-  createKnowledgeAPI,
-  updateKnowledgeAPI,
-  deleteKnowledgeAPI,
-} from "../../../api/knowledge";
-import { uploadKnowledgeImageAPI } from "../../../api/knowledge";
-import {
   FormatBold,
   FormatItalic,
   FormatUnderlined,
@@ -179,38 +172,6 @@ const KnowledgeComponentAdmin = () => {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(articles));
     } catch {}
   }, [articles]);
-
-  // Try fetch from API, fallback to existing state
-  useEffect(() => {
-    const fetchRemote = async () => {
-      try {
-        const res = await getAllKnowledgeAPI();
-        if (res.err === 0 && Array.isArray(res.data)) {
-          const mapped: Article[] = res.data.map((item: any) => ({
-            id: String(
-              item.id ||
-                item.slug ||
-                item.title?.toLowerCase()?.replace(/\s+/g, "-"),
-            ),
-            topic: item.topic || "METHODS",
-            title: String(item.title || ""),
-            summary: String(item.summary || ""),
-            content: String(item.content || ""),
-            level: item.level || "BASIC",
-            tags: Array.isArray(item.tags)
-              ? item.tags
-              : typeof item.tags === "string"
-                ? [item.tags]
-                : [],
-            updatedAt:
-              item.updatedAt || item.updated_at || new Date().toISOString(),
-          }));
-          setArticles(mapped);
-        }
-      } catch {}
-    };
-    fetchRemote();
-  }, []);
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -278,7 +239,6 @@ const KnowledgeComponentAdmin = () => {
   };
 
   const handleDelete = (id: string) => {
-    deleteKnowledgeAPI(id).catch(() => {});
     setArticles((prev) => prev.filter((a) => a.id !== id));
   };
 
@@ -294,18 +254,12 @@ const KnowledgeComponentAdmin = () => {
       };
 
       if (modalMode === "create") {
-        await createKnowledgeAPI(articleData as any).catch(() => {});
         const newArticle: Article = {
           ...articleData,
           id: values.id || values.title.toLowerCase().replace(/\s+/g, "-"), // Simple ID generation
         };
         setArticles((prev) => [newArticle, ...prev]);
       } else {
-        if (editingId) {
-          await updateKnowledgeAPI(editingId, articleData as any).catch(
-            () => {},
-          );
-        }
         setArticles((prev) =>
           prev.map((a) => (a.id === editingId ? { ...a, ...articleData } : a)),
         );
@@ -320,16 +274,15 @@ const KnowledgeComponentAdmin = () => {
     fileInputRef.current?.click();
   };
 
-  const onFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    try {
-      const res = await uploadKnowledgeImageAPI(file);
-      const url = res?.data?.url;
-      if (res.err === 0 && url) {
-        editor?.chain().focus().setImage({ src: url }).run();
-      }
-    } catch {}
+    const reader = new FileReader();
+    reader.onload = () => {
+      const src = String(reader.result || "");
+      if (src) editor?.chain().focus().setImage({ src }).run();
+    };
+    reader.readAsDataURL(file);
     e.target.value = "";
   };
 
@@ -512,23 +465,6 @@ const KnowledgeComponentAdmin = () => {
                 tooltip="Tự động tạo nếu để trống"
               >
                 <Input placeholder="ví-dụ-id-bai-viet" />
-              </Form.Item>
-            </Col>
-          </Row>
-
-          <Row gutter={16}>
-            <Col span={24}>
-              <Form.Item
-                name="summary"
-                label="Mô tả"
-                rules={[
-                  { required: true, message: "Vui lòng nhập mô tả bài viết" },
-                ]}
-              >
-                <Input.TextArea
-                  placeholder="Nhập mô tả ngắn gọn về bài viết"
-                  rows={3}
-                />
               </Form.Item>
             </Col>
           </Row>

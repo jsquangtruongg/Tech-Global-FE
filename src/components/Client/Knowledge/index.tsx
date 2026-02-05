@@ -179,7 +179,11 @@ const KnowledgeComponent = () => {
                 </Space>
               }
             >
-              <Paragraph className="kl-summary">{a.summary}</Paragraph>
+              <Paragraph className="kl-summary" style={{ minHeight: 70 }}>
+                {a.summary.split(" ").length > 30
+                  ? a.summary.split(" ").slice(0, 30).join(" ") + "..."
+                  : a.summary}
+              </Paragraph>
               <div className="kl-tags">
                 {a.tags.map((t) => (
                   <Tag
