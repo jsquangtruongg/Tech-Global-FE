@@ -51,6 +51,27 @@
 }
 
 .kd-content {
+  ul{
+    li{
+      line-height: 2;
+      font-size: 15px;
+    }
+  }
+  ol{
+    li{
+      line-height: 2;
+      font-size: 15px;
+    }
+  }
+  h2{
+    margin: 12px 0 8px 0;
+    font-size: 24px;
+    font-weight: 600;
+  }
+  p {
+    line-height: 2;
+    font-size: 16px;
+  }
   img {
     max-width: 60%;
     height: auto;
