@@ -185,7 +185,7 @@ const KnowledgeComponent = () => {
                   : a.summary}
               </Paragraph>
               <div className="kl-tags">
-                {a.tags.map((t) => (
+                {a.tags.slice(0, 2).map((t) => (
                   <Tag
                     key={t}
                     color={
@@ -199,6 +199,7 @@ const KnowledgeComponent = () => {
                     {t}
                   </Tag>
                 ))}
+                {a.tags.length > 2 && <Tag>...</Tag>}
               </div>
 
               <Space
@@ -214,6 +215,7 @@ const KnowledgeComponent = () => {
                 <Button
                   type="primary"
                   onClick={() => handlerClickNavigateToDetail(a.id)}
+                  style={{ backgroundColor: "#4aaf52", borderColor: "#4aaf52", boxShadow: "0 0 1px #4aaf52" }}
                 >
                   Xem chi tiết
                 </Button>
