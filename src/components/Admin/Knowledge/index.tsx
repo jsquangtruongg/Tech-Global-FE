@@ -65,6 +65,13 @@ import {
   Highlight as HighlightIcon,
   Checklist,
 } from "@mui/icons-material";
+import {
+  getAllKnowledgeAPI,
+  createKnowledgeAPI,
+  updateKnowledgeAPI,
+  deleteKnowledgeAPI,
+} from "../../../api/knowledge";
+import { message } from "antd";
 
 type Level = "BASIC" | "ADVANCED";
 type TopicKey =
@@ -106,55 +113,9 @@ const TAG_OPTIONS = [
 ];
 const STORAGE_KEY = "knowledge_articles";
 
-// Initial Data
-const INITIAL_ARTICLES: Article[] = [
-  {
-    id: "price-action",
-    topic: "METHODS",
-    title: "Price Action",
-    summary:
-      "Phương pháp đọc hành động giá để xác định xu hướng, vùng phản ứng ",
-    content: "<p>Nội dung chi tiết về Price Action...</p>",
-    level: "BASIC",
-    tags: ["Quan trọng", "Bắt buộc phải biết"],
-    related: ["Pin Bar", "Inside Bar"],
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: "trend-following",
-    topic: "METHODS",
-    title: "Trend Following",
-    summary: "Đi theo xu hướng chính, bỏ qua nhiễu nhỏ để tối ưu RR.",
-    content: "<p>Nội dung chi tiết về Trend Following...</p>",
-    level: "BASIC",
-    tags: ["Quan trọng"],
-    related: ["EMA", "MACD"],
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: "fomo",
-    topic: "PSYCHOLOGY",
-    title: "FOMO",
-    summary: "Nỗi sợ bỏ lỡ khiến vào lệnh không theo kế hoạch.",
-    content: "<p>Nội dung chi tiết về FOMO...</p>",
-    level: "BASIC",
-    tags: ["Dễ sai"],
-    related: ["Checklist vào lệnh", "Nhật ký cảm xúc"],
-    updatedAt: new Date().toISOString(),
-  },
-];
-
 const KnowledgeComponentAdmin = () => {
-  const [articles, setArticles] = useState<Article[]>(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return INITIAL_ARTICLES;
-      const parsed = JSON.parse(raw);
-      return Array.isArray(parsed) ? parsed : INITIAL_ARTICLES;
-    } catch {
-      return INITIAL_ARTICLES;
-    }
-  });
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [topicFilter, setTopicFilter] = useState<TopicKey | "ALL">("ALL");
   const [levelFilter, setLevelFilter] = useState<Level | "ALL">("ALL");
@@ -166,12 +127,39 @@ const KnowledgeComponentAdmin = () => {
   const [formContent, setFormContent] = useState("");
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  // Sync to localStorage whenever articles change
-  useEffect(() => {
+  const fetchArticles = async () => {
+    setLoading(true);
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(articles));
-    } catch {}
-  }, [articles]);
+      const res = await getAllKnowledgeAPI();
+      if (res.err === 0 && Array.isArray(res.data)) {
+        const mapped: Article[] = res.data.map((item: any) => ({
+          id: String(item.id || item.slug || ""),
+          topic: item.topic || "METHODS",
+          title: String(item.title || ""),
+          summary: String(item.summary || ""),
+          content: String(item.content || ""),
+          level: item.level || "BASIC",
+          tags: Array.isArray(item.tags)
+            ? item.tags
+            : typeof item.tags === "string"
+              ? [item.tags]
+              : [],
+          related: Array.isArray(item.related) ? item.related : [],
+          updatedAt: item.updatedAt,
+        }));
+        setArticles(mapped);
+      }
+    } catch (e) {
+      console.error(e);
+      message.error("Lỗi kết nối đến server");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchArticles();
+  }, []);
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -238,33 +226,49 @@ const KnowledgeComponentAdmin = () => {
     setModalOpen(true);
   };
 
-  const handleDelete = (id: string) => {
-    setArticles((prev) => prev.filter((a) => a.id !== id));
+  const handleDelete = async (id: string) => {
+    try {
+      const res = await deleteKnowledgeAPI(id);
+      if (res.err === 0) {
+        message.success("Đã xóa bài viết");
+        fetchArticles();
+      } else {
+        message.error(res.mess || "Lỗi khi xóa");
+      }
+    } catch (e) {
+      message.error("Lỗi kết nối");
+    }
   };
 
   const handleSave = async () => {
     try {
       const values = await form.validateFields();
-      const now = new Date().toISOString();
 
       const articleData = {
         ...values,
         content: formContent,
-        updatedAt: now,
       };
 
       if (modalMode === "create") {
-        const newArticle: Article = {
-          ...articleData,
-          id: values.id || values.title.toLowerCase().replace(/\s+/g, "-"), // Simple ID generation
-        };
-        setArticles((prev) => [newArticle, ...prev]);
+        const res = await createKnowledgeAPI(articleData);
+        if (res.err === 0) {
+          message.success("Tạo bài viết thành công");
+          fetchArticles();
+          setModalOpen(false);
+        } else {
+          message.error(res.mess || "Lỗi khi tạo");
+        }
       } else {
-        setArticles((prev) =>
-          prev.map((a) => (a.id === editingId ? { ...a, ...articleData } : a)),
-        );
+        if (!editingId) return;
+        const res = await updateKnowledgeAPI(editingId, articleData);
+        if (res.err === 0) {
+          message.success("Cập nhật thành công");
+          fetchArticles();
+          setModalOpen(false);
+        } else {
+          message.error(res.mess || "Lỗi khi cập nhật");
+        }
       }
-      setModalOpen(false);
     } catch (e) {
       console.error("Validate Failed:", e);
     }
