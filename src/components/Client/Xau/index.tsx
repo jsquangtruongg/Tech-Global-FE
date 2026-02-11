@@ -8,17 +8,26 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import NewspaperIcon from "@mui/icons-material/Newspaper";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 import "dayjs/locale/vi";
-import { getGoldNewsAPI, type IGoldNewsItem } from "../../../api/analytics";
+import {
+  getGoldNewsAPI,
+  type IGoldNewsItem,
+  getEconomicCalendarAPI,
+  type IEconomicEvent,
+} from "../../../api/analytics";
 import ChartLong from "../../../assets/images/F4ln8b8T_mid.png";
 import ChartShort from "../../../assets/images/s3Bp9oE0-637511160372186596.png";
 
 dayjs.extend(relativeTime);
+dayjs.extend(customParseFormat);
 dayjs.locale("vi");
 
 const XauComponent = () => {
   const [news, setNews] = useState<IGoldNewsItem[]>([]);
   const [loadingNews, setLoadingNews] = useState(false);
+  const [calendarEvents, setCalendarEvents] = useState<IEconomicEvent[]>([]);
+  const [loadingCalendar, setLoadingCalendar] = useState(false);
 
   useEffect(() => {
     const fetchNews = async () => {
@@ -32,7 +41,21 @@ const XauComponent = () => {
       setLoadingNews(false);
     };
 
+    const fetchCalendar = async () => {
+      setLoadingCalendar(true);
+      const res = await getEconomicCalendarAPI();
+      if (res.err === 0 && Array.isArray(res.data)) {
+        // Backend now filters for USD and High/Medium impact events
+        // We just display what we get, which is the relevant list for the week
+        setCalendarEvents(res.data);
+      } else {
+        setCalendarEvents([]);
+      }
+      setLoadingCalendar(false);
+    };
+
     fetchNews();
+    fetchCalendar();
   }, []);
 
   const renderNewsTime = (iso: string) => {
@@ -41,6 +64,62 @@ const XauComponent = () => {
     if (!d.isValid()) return "";
     return d.fromNow();
   };
+
+  const mapCountryToFlag = (currency: string) => {
+    const map: Record<string, string> = {
+      USD: "🇺🇸",
+      EUR: "🇪🇺",
+      GBP: "🇬🇧",
+      JPY: "🇯🇵",
+      AUD: "🇦🇺",
+      CAD: "🇨🇦",
+      CHF: "🇨🇭",
+      CNY: "🇨🇳",
+      NZD: "🇳🇿",
+    };
+    return map[currency] || "🌍";
+  };
+
+  const getImpactStars = (impact: string) => {
+    if (!impact) return 1;
+    const i = impact.toLowerCase();
+    if (i.includes("high")) return 3;
+    if (i.includes("medium")) return 2;
+    return 1;
+  };
+
+  // Format date for display (e.g., "Thứ 2, 07/02")
+  const formatDate = (dateStr: string) => {
+    if (!dateStr) return "";
+    // dateStr from XML is usually MM-DD-YYYY
+    let d = dayjs(dateStr, "MM-DD-YYYY", true);
+    if (!d.isValid()) {
+      // Fallback to standard parsing if explicit format fails
+      d = dayjs(dateStr);
+    }
+    if (!d.isValid()) return dateStr;
+    return d.format("dddd, DD/MM");
+  };
+
+  // Group events by date
+  const groupedEvents = calendarEvents.reduce(
+    (acc, event) => {
+      const date = event.date;
+      if (!acc[date]) {
+        acc[date] = [];
+      }
+      acc[date].push(event);
+      return acc;
+    },
+    {} as Record<string, IEconomicEvent[]>,
+  );
+
+  // Sort dates
+  const sortedDates = Object.keys(groupedEvents).sort((a, b) => {
+    // Assuming MM-DD-YYYY format from XML, but let's parse safely
+    // Or just use dayjs comparison
+    return dayjs(a).valueOf() - dayjs(b).valueOf();
+  });
 
   return (
     <div className="xau-wrapper">
@@ -95,118 +174,53 @@ const XauComponent = () => {
               ))}
           </div>
         </section>
-
-        {/* Trend Analysis Section */}
-        <section className="xau-section trend-section">
-          <div className="section-header">
-            <TrendingUpIcon className="section-icon" />
-            <h2 className="section-title">PHÂN TÍCH XU HƯỚNG</h2>
-          </div>
-          <div className="trend-grid">
-            <div className="trend-card">
-              <div className="card-header">
-                <h3>Xu Hướng Dài Hạn (D1)</h3>
-                <span className="trend-badge up">Tăng</span>
-              </div>
-              <div className="chart-container">
-                <img src={ChartLong} alt="Xu hướng dài hạn" />
-              </div>
-            </div>
-            <div className="trend-card">
-              <div className="card-header">
-                <h3>Xu Hướng Ngắn Hạn (M15)</h3>
-                <span className="trend-badge neutral">Sideway</span>
-              </div>
-              <div className="chart-container">
-                <img src={ChartShort} alt="Xu hướng ngắn hạn" />
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Expert Analysis Section */}
-        <section className="xau-section expert-section">
-          <div className="section-header">
-            <InfoOutlinedIcon className="section-icon" />
-            <h2 className="section-title">NHẬN ĐỊNH CHUYÊN GIA</h2>
-          </div>
-          <div className="expert-grid">
-            <div className="scenario-card bullish">
-              <div className="scenario-header">
-                <TrendingUpIcon /> Kịch Bản Tăng
-              </div>
-              <ul className="scenario-list">
-                <li>
-                  Nếu giá vượt kháng cự <strong>2000</strong>
-                </li>
-                <li>
-                  Có thể bật lên hướng <strong>2020 - 2030</strong>
-                </li>
-              </ul>
-            </div>
-            <div className="scenario-card bearish">
-              <div className="scenario-header">
-                <TrendingDownIcon /> Kịch Bản Giảm
-              </div>
-              <ul className="scenario-list">
-                <li>
-                  Nếu mất hỗ trợ <strong>1980</strong>
-                </li>
-                <li>
-                  Có thể rơi về vùng <strong>1960 - 1950</strong>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        {/* Calendar Section */}
         <section className="xau-section calendar-section">
           <div className="section-header">
             <CalendarMonthIcon className="section-icon" />
-            <h2 className="section-title">LỊCH KINH TẾ</h2>
+            <h2 className="section-title">LỊCH KINH TẾ TUẦN NÀY</h2>
           </div>
           <div className="calendar-container">
             <div className="calendar-table-header">
-              <div className="col time">Thời Gian</div>
+              <div className="col time">Giờ</div>
               <div className="col event">Sự Kiện</div>
               <div className="col impact">Tác Động</div>
-              <div className="col result">Kết Quả</div>
+              <div className="col result">Dự Báo</div>
             </div>
-            {[
-              {
-                time: "19:30",
-                flag: "🇺🇸",
-                event: "Chỉ số CPI (Mỹ)",
-                result: "3.4%",
-              },
-              {
-                time: "21:00",
-                flag: "🇺🇸",
-                event: "Biên bản cuộc họp FED",
-                result: "—",
-              },
-              {
-                time: "19:30",
-                flag: "🇺🇸",
-                event: "Báo cáo việc làm số NFP",
-                result: "—",
-              },
-            ].map((item, index) => (
-              <div key={index} className="calendar-row">
-                <div className="col time">{item.time}</div>
-                <div className="col event">
-                  <span className="flag">{item.flag}</span>
-                  <span className="name">{item.event}</span>
-                </div>
-                <div className="col impact">
-                  {[...Array(3)].map((_, i) => (
-                    <StarRateIcon key={i} className="star filled" />
+            {loadingCalendar && (
+              <div style={{ padding: 20, textAlign: "center" }}>
+                Đang tải lịch kinh tế...
+              </div>
+            )}
+            {!loadingCalendar && calendarEvents.length === 0 && (
+              <div style={{ padding: 20, textAlign: "center" }}>
+                Không có sự kiện quan trọng tuần này.
+              </div>
+            )}
+            {!loadingCalendar &&
+              sortedDates.map((date) => (
+                <div key={date}>
+                  <div className="calendar-date-header">{formatDate(date)}</div>
+                  {groupedEvents[date].map((item, index) => (
+                    <div key={`${date}-${index}`} className="calendar-row">
+                      <div className="col time">
+                        <div style={{ fontWeight: "bold" }}>{item.time}</div>
+                      </div>
+                      <div className="col event">
+                        <span className="flag">
+                          {mapCountryToFlag(item.country)}
+                        </span>
+                        <span className="name">{item.title}</span>
+                      </div>
+                      <div className="col impact">
+                        {[...Array(getImpactStars(item.impact))].map((_, i) => (
+                          <StarRateIcon key={i} className="star filled" />
+                        ))}
+                      </div>
+                      <div className="col result">{item.forecast || "—"}</div>
+                    </div>
                   ))}
                 </div>
-                <div className="col result">{item.result}</div>
-              </div>
-            ))}
+              ))}
           </div>
         </section>
       </div>

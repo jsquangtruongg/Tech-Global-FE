@@ -94,6 +94,10 @@ const NavBarLayout = () => {
           key: "/admin/knowledge",
           label: "Thư viện kiến thức",
         },
+        {
+          key: "/admin/common-errors",
+          label: "Thư viện lỗi phổ biến",
+        },
       ],
     },
     {

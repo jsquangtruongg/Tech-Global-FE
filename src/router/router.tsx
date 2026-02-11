@@ -51,6 +51,8 @@ import PsychologyAdminPage from "../page/Admin/Psychology";
 import FeelingAdminPage from "../page/Admin/Feeling";
 import EmotionJournalPage from "../page/Client/Emotion-Journal";
 import KnowledgeAdminPage from "../page/Admin/Knowledge";
+import CommonErrorsDetailPage from "../page/Client/Common-Errors-Detail";
+import CommonErrorsAdminPage from "../page/Admin/Common-Errors";
 const router = createBrowserRouter([
   {
     element: <HeaderLayout />,
@@ -188,6 +190,10 @@ const router = createBrowserRouter([
         element: <EmotionJournalPage />,
         path: "/library/emotion-journal",
       },
+      {
+        element: <CommonErrorsDetailPage />,
+        path: "/library/common-errors-detail/:id",
+      },
     ],
   },
 
@@ -288,6 +294,10 @@ const router = createBrowserRouter([
       {
         element: <KnowledgeAdminPage />,
         path: "/admin/knowledge",
+      },
+      {
+        element: <CommonErrorsAdminPage />,
+        path: "/admin/common-errors",
       },
     ],
   },

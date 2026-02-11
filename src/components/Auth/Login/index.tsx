@@ -5,7 +5,10 @@ import {
 } from "../../Common/InputCommon";
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { Link } from "react-router-dom";
-import { useLogin } from "../../../hooks/useAuth";
+import { useLogin, useLoginGoogle } from "../../../hooks/useAuth";
+import GoogleIcon from "@mui/icons-material/Google";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import { useGoogleLogin } from "@react-oauth/google";
 
 interface FormErrors {
   email?: string;
@@ -20,6 +23,16 @@ const LoginComponent = () => {
 
   const [errors, setErrors] = useState<FormErrors>({});
   const { mutate: login, isPending } = useLogin();
+  const { mutate: loginGoogle } = useLoginGoogle();
+
+  const handleGoogleLogin = useGoogleLogin({
+    onSuccess: (tokenResponse) => {
+      loginGoogle(tokenResponse.access_token);
+    },
+    onError: () => {
+      console.log("Login Failed");
+    },
+  });
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -97,6 +110,25 @@ const LoginComponent = () => {
             >
               {isPending ? "Đang đăng nhập..." : "Đăng nhập"}
             </button>
+          </div>
+
+          <div className="item-register">
+            <div className="register-google">
+              <button
+                type="button"
+                className="btn-social google"
+                onClick={() => handleGoogleLogin()}
+              >
+                <GoogleIcon className="icon" />
+                <span>Google</span>
+              </button>
+            </div>
+            <div className="register-facebook" >
+              <button type="button" className="btn-social facebook">
+                <FacebookIcon className="icon" />
+                <span>Facebook</span>
+              </button>
+            </div>
           </div>
 
           <div className="auth-footer">

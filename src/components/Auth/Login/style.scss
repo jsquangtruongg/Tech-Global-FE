@@ -65,6 +65,64 @@
         }
       }
 
+      .item-register {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+        gap: 10px;
+
+        .register-google,
+        .register-facebook {
+          flex: 1;
+        }
+
+        .btn-social {
+          width: 100%;
+          padding: 10px;
+          border-radius: 8px;
+          border: 1px solid #d1d5db;
+          background-color: white;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+          transition: background-color 0.2s;
+
+          .icon {
+            font-size: 20px;
+          }
+
+          span {
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+          }
+
+          &:hover {
+            background-color: #f3f4f6;
+          }
+
+          &.google {
+            .icon {
+              color: #db4437;
+            }
+          }
+
+          &.facebook {
+            .icon {
+              color: #1877f2;
+            }
+
+            &:hover {
+              cursor: not-allowed;
+              opacity: 0.6;
+              background-color: white;
+            }
+          }
+        }
+      }
+
       .auth-footer {
         margin-top: 24px;
         text-align: center;

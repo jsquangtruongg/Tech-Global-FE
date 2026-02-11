@@ -13,3 +13,10 @@ export const apiLogin = (payload: any) =>
     method: "post",
     data: payload,
   });
+
+export const apiLoginGoogle = (token: string) =>
+  axiosInstance({
+    url: "/auth/login-google",
+    method: "post",
+    data: { token },
+  });
