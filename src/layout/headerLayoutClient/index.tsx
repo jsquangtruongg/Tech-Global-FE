@@ -154,12 +154,18 @@ const HeaderLayout = () => {
     },
     {
       key: "3",
+      label: "Nhật ký Trading",
+      icon: <ReadOutlined />,
+      onClick: () => navigate("/library/emotion-journal"),
+    },
+    {
+      key: "4",
       label: "Cài đặt",
       icon: <SettingOutlined />,
       onClick: () => navigate("/setting"),
     },
     {
-      key: "4",
+      key: "5",
       label: "Khóa học hiện có",
       icon: <BookOutlined />,
       onClick: () => navigate("/course-user"),
@@ -168,7 +174,7 @@ const HeaderLayout = () => {
     user?.userData?.roleData?.code === "R2"
       ? [
           {
-            key: "5",
+            key: "6",
             label: "Admin & Quản lý",
             icon: <ApiOutlined />,
             onClick: () => navigate("/admin/dashboard"),
@@ -372,18 +378,7 @@ const HeaderLayout = () => {
                           </p>
                         </div>
                       </div>
-                      <div
-                        className="feature-item"
-                        onClick={handleClickLearningPath}
-                      >
-                        <ProfileOutlined className="feature-icon" />
-                        <div className="feature-text">
-                          <p className="feature-title">Lộ Trình Học Trading</p>
-                          <p className="feature-desc">
-                            Hệ thống các bước từ cơ bản đến nâng cao
-                          </p>
-                        </div>
-                      </div>
+
                       <div
                         className="feature-item"
                         onClick={handleClickKnowledgeLibrary}
@@ -393,20 +388,6 @@ const HeaderLayout = () => {
                           <p className="feature-title">Thư Viện Kiến Thức</p>
                           <p className="feature-desc">
                             Tổng hợp khái niệm, mô hình và quy tắc
-                          </p>
-                        </div>
-                      </div>
-                      <div
-                        className="feature-item"
-                        onClick={handleClickStrategyLibrary}
-                      >
-                        <BulbOutlined className="feature-icon" />
-                        <div className="feature-text">
-                          <p className="feature-title">
-                            Kho Chiến Lược Giao Dịch
-                          </p>
-                          <p className="feature-desc">
-                            Chiến lược được kiểm chứng và tối ưu
                           </p>
                         </div>
                       </div>
@@ -427,18 +408,7 @@ const HeaderLayout = () => {
                     </div>
                     <div className="features-section">
                       <p className="section-title">KỶ LUẬT & TÂM LÝ</p>
-                      <div
-                        className="feature-item"
-                        onClick={handleClickChecklist}
-                      >
-                        <CheckSquareOutlined className="feature-icon" />
-                        <div className="feature-text">
-                          <p className="feature-title">Checklist Vào Lệnh</p>
-                          <p className="feature-desc">
-                            Quy trình vào lệnh rõ ràng, nhất quán
-                          </p>
-                        </div>
-                      </div>
+
                       <div
                         className="feature-item"
                         onClick={handleClickPsychology}

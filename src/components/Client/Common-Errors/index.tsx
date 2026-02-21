@@ -1,5 +1,5 @@
 import "./style.scss";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import {
   Card,
   Tabs,
@@ -10,325 +10,211 @@ import {
   Typography,
   Button,
   Empty,
+  Input,
+  Select,
+  Spin,
 } from "antd";
 import { useNavigate } from "react-router-dom";
+import {
+  getAllCommonErrorsAPI,
+  type ICommonError,
+  type Severity,
+} from "../../../api/common-errors";
 
-const { Title, Paragraph, Text } = Typography;
-
-type Severity = "low" | "medium" | "high";
-type Category = "PSYCHOLOGY" | "TECHNICAL" | "RISK" | "PROCESS";
-
-type CommonError = {
-  id: string;
-  category: Category;
-  name: string;
-  desc: string[];
-  rootCauses: string[];
-  consequence: string[];
-  signs: string[];
-  fix: {
-    checklist: string[];
-    rules: string[];
-    habits: string[];
-  };
-  links?: string[];
-  tags: string[];
-  severity: Severity;
-  examples: {
-    loss: { title: string; desc: string }[];
-  };
-};
-
-const ERRORS: CommonError[] = [
-  {
-    id: "fomo-top",
-    category: "PSYCHOLOGY",
-    name: "FOMO đu đỉnh",
-    desc: ["Vào lệnh muộn khi giá đã chạy mạnh", "Không có điểm vào hợp lệ"],
-    rootCauses: ["Tâm lý sợ lỡ cơ hội", "Thiếu checklist", "Kỳ vọng sai"],
-    consequence: ["Thua lỗ không cần thiết", "Mất kỷ luật"],
-    signs: ["Nhảy vào khi giá tăng dựng đứng", "Bỏ qua điều kiện vào lệnh"],
-    fix: {
-      checklist: ["Chỉ vào khi đủ setup", "Giới hạn số lệnh/ngày"],
-      rules: ["Không vào sau nến động lượng lớn", "Tuân thủ RR tối thiểu"],
-      habits: ["Ghi nhật ký cảm xúc", "Ôn lại checklist trước khi trade"],
-    },
-    links: ["Checklist vào lệnh", "Tâm lý giao dịch nền tảng"],
-    tags: ["Nguy hiểm", "Rất hay mắc", "Cần tránh"],
-    severity: "high",
-    examples: {
-      loss: [
-        {
-          title: "Mua sau nến tăng mạnh",
-          desc: "Giá đảo chiều ngay sau đó, vi phạm checklist, RR không đảm bảo.",
-        },
-      ],
-    },
-  },
-  {
-    id: "revenge-trade",
-    category: "PSYCHOLOGY",
-    name: "Revenge Trade",
-    desc: ["Tăng lot để gỡ lỗ", "Vào lệnh liên tục sau chuỗi thua"],
-    rootCauses: ["Cảm xúc tiêu cực", "Thiếu kế hoạch gỡ lỗ", "Thiếu giới hạn"],
-    consequence: ["Cháy tài khoản", "Mất tự tin"],
-    signs: ["Phá SL", "Tăng lot vô tội vạ"],
-    fix: {
-      checklist: ["Dừng giao dịch sau 3 lệnh thua", "Giảm khối lượng lệnh"],
-      rules: ["Giới hạn rủi ro ngày", "Không trade khi cảm xúc mạnh"],
-      habits: ["Review tuần/tháng", "Thiền/đi bộ ngắn trước khi trade"],
-    },
-    links: ["Nhật ký giao dịch", "Module tâm lý nâng cao"],
-    tags: ["Nguy hiểm", "Cần tránh"],
-    severity: "high",
-    examples: {
-      loss: [
-        {
-          title: "Vào lệnh gỡ sau lệnh thua",
-          desc: "Tăng lot và phá SL, drawdown tăng nhanh, vi phạm quy tắc.",
-        },
-      ],
-    },
-  },
-  {
-    id: "wrong-trend",
-    category: "TECHNICAL",
-    name: "Vào sai xu hướng",
-    desc: ["Trade ngược xu hướng mạnh", "Không xác nhận cấu trúc"],
-    rootCauses: [
-      "Thiếu kiến thức cấu trúc thị trường",
-      "Đánh giá bối cảnh sai",
-    ],
-    consequence: ["Tỷ lệ thua cao", "RR kém"],
-    signs: ["Bắt đỉnh/đáy", "Không có Higher High/Lower Low rõ ràng"],
-    fix: {
-      checklist: ["Xác định xu hướng khung lớn", "Chỉ trade theo hướng trend"],
-      rules: ["RR tối thiểu 1:2", "Không vào lệnh giữa vùng"],
-      habits: ["Backtest theo trend", "Đánh dấu vùng S/R trước phiên"],
-    },
-    links: ["Market Structure", "Trend Following"],
-    tags: ["Rất hay mắc"],
-    severity: "medium",
-    examples: {
-      loss: [
-        {
-          title: "Bán trong xu hướng tăng mạnh",
-          desc: "Không có tín hiệu đảo chiều tại vị trí hợp lệ, bị quét SL.",
-        },
-      ],
-    },
-  },
-  {
-    id: "no-rr",
-    category: "RISK",
-    name: "Không tính RR",
-    desc: ["Vào lệnh mà không xác định RR", "SL/TP đặt cảm tính"],
-    rootCauses: ["Thiếu kỷ luật", "Thiếu kiến thức quản lý vốn"],
-    consequence: ["Kết quả dài hạn kém", "Drawdown lớn"],
-    signs: ["Không đặt SL", "RR < 1:1 lặp lại"],
-    fix: {
-      checklist: ["Chỉ vào lệnh RR ≥ 1:2", "Luôn đặt SL"],
-      rules: ["Giới hạn 0.5–2%/lệnh", "Tính khối lượng theo SL"],
-      habits: ["Journal rủi ro", "Review lệnh theo RR"],
-    },
-    links: ["RR", "Position sizing", "Drawdown"],
-    tags: ["Cần tránh", "Quan trọng"],
-    severity: "high",
-    examples: {
-      loss: [
-        {
-          title: "Vào lệnh không SL",
-          desc: "Giá đi ngược, không có điểm thoát, tổn thất lớn.",
-        },
-      ],
-    },
-  },
-  {
-    id: "no-journal",
-    category: "PROCESS",
-    name: "Không journal / review",
-    desc: ["Không ghi chép", "Không review tuần/tháng"],
-    rootCauses: ["Thiếu quy trình", "Không coi trọng dữ liệu cá nhân"],
-    consequence: ["Không tiến bộ", "Lặp lại sai lầm"],
-    signs: ["Không nhớ lý do vào lệnh", "Không biết lỗi thường gặp"],
-    fix: {
-      checklist: ["Journal sau mỗi lệnh", "Review hàng tuần/tháng"],
-      rules: ["Gắn chiến lược với journal", "Checklist trước phiên"],
-      habits: ["Tạo thói quen review cuối tuần", "Ghi lại cảm xúc"],
-    },
-    links: ["Nhật ký giao dịch", "Checklist vào lệnh", "Lộ trình học"],
-    tags: ["Rất hay mắc"],
-    severity: "medium",
-    examples: {
-      loss: [
-        {
-          title: "Trade không có plan",
-          desc: "Không có checklist, không journal, lỗi lặp lại không được phát hiện.",
-        },
-      ],
-    },
-  },
-];
-
-const CATEGORY_TABS: { key: Category; label: string }[] = [
-  { key: "PSYCHOLOGY", label: "Lỗi tâm lý" },
-  { key: "TECHNICAL", label: "Lỗi kỹ thuật" },
-  { key: "RISK", label: "Lỗi quản lý vốn" },
-  { key: "PROCESS", label: "Lỗi quy trình" },
-];
+const { Title, Paragraph } = Typography;
 
 const CommonErrorsComponent = () => {
   const navigate = useNavigate();
-  const [category, setCategory] = useState<Category>("PSYCHOLOGY");
-
-  const filtered = useMemo(
-    () => ERRORS.filter((e) => e.category === category),
-    [category],
+  const [activeTab, setActiveTab] = useState<string>("ALL");
+  const [searchText, setSearchText] = useState("");
+  const [selectedSeverity, setSelectedSeverity] = useState<Severity | "ALL">(
+    "ALL",
   );
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
-  const severityColor = (s: Severity) =>
-    s === "high" ? "red" : s === "medium" ? "gold" : "green";
+  const [errors, setErrors] = useState<ICommonError[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const res = await getAllCommonErrorsAPI();
+        if (res.err === 0 && Array.isArray(res.data)) {
+          setErrors(res.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch common errors:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const uniqueTags = useMemo(() => {
+    const tags = new Set<string>();
+    errors.forEach((err) => {
+      if (Array.isArray(err.tags)) {
+        err.tags.forEach((t) => tags.add(t));
+      }
+    });
+    return Array.from(tags).map((t) => ({ value: t, label: t }));
+  }, [errors]);
+
+  const filteredErrors = useMemo(() => {
+    return errors.filter((err) => {
+      const matchTab = activeTab === "ALL" || err.category === activeTab;
+      const matchSearch =
+        searchText === "" ||
+        err.name.toLowerCase().includes(searchText.toLowerCase()) ||
+        err.tags?.some((t) =>
+          t.toLowerCase().includes(searchText.toLowerCase()),
+        );
+      const matchSeverity =
+        selectedSeverity === "ALL" || err.severity === selectedSeverity;
+      const matchTags =
+        selectedTags.length === 0 ||
+        selectedTags.every((t) => err.tags?.includes(t));
+
+      return matchTab && matchSearch && matchSeverity && matchTags;
+    });
+  }, [errors, activeTab, searchText, selectedSeverity, selectedTags]);
+
+  const getSeverityColor = (sev: Severity) => {
+    switch (sev) {
+      case "high":
+        return "red";
+      case "medium":
+        return "orange";
+      case "low":
+        return "green";
+      default:
+        return "default";
+    }
+  };
+
+  const getSeverityLabel = (sev: Severity) => {
+    switch (sev) {
+      case "high":
+        return "Nghiêm trọng";
+      case "medium":
+        return "Trung bình";
+      case "low":
+        return "Thấp";
+      default:
+        return sev;
+    }
+  };
+
+  const getSummary = (html: string) => {
+    if (!html) return "Chưa có mô tả...";
+    const text = html.replace(/<[^>]*>?/gm, "");
+    return text.split(" ").length > 30
+      ? text.split(" ").slice(0, 30).join(" ") + "..."
+      : text;
+  };
 
   return (
     <div className="common-errors">
-      <div className="common-errors__intro">
-        <Title level={2}>Thư Viện Lỗi Thường Gặp</Title>
+      <div className="common-errors__header">
+        <Title level={2}>Thư viện Lỗi Thường Gặp (Common Errors)</Title>
         <Paragraph>
-          Kho tổng hợp sai lầm phổ biến của trader giúp nhận diện lỗi bản thân,
-          tránh lặp lại và hiểu nguyên nhân thua lỗ. Đây là thư viện “chống cháy
-          tài khoản”.
+          Tổng hợp các lỗi sai phổ biến trong Trading, nguyên nhân và cách khắc
+          phục triệt để.
         </Paragraph>
+        <Space wrap>
+          <Input.Search
+            placeholder="Tìm theo tiêu đề"
+            onSearch={(v) => setSearchText(v)}
+            allowClear
+            style={{ width: 280 }}
+          />
+          <Select
+            value={selectedSeverity}
+            onChange={(v) => setSelectedSeverity(v)}
+            options={[
+              { value: "ALL", label: "Tất cả mức độ" },
+              { value: "high", label: "Nghiêm trọng" },
+              { value: "medium", label: "Trung bình" },
+              { value: "low", label: "Thấp" },
+            ]}
+            style={{ width: 180 }}
+          />
+          <Select
+            mode="multiple"
+            value={selectedTags}
+            onChange={setSelectedTags}
+            placeholder="Lọc theo tag"
+            options={uniqueTags}
+            style={{ minWidth: 220 }}
+          />
+        </Space>
       </div>
 
       <Tabs
-        activeKey={category}
-        onChange={(k) => setCategory(k as Category)}
-        items={CATEGORY_TABS.map((t) => ({ key: t.key, label: t.label }))}
+        activeKey={activeTab}
+        onChange={setActiveTab}
+        items={[
+          { key: "ALL", label: "Tất cả" },
+          { key: "PSYCHOLOGY", label: "Tâm lý" },
+          { key: "TECHNICAL", label: "Kỹ thuật" },
+          { key: "RISK", label: "Quản lý vốn" },
+          { key: "PROCESS", label: "Quy trình" },
+        ]}
+        style={{ marginBottom: 24 }}
       />
 
-      <Row gutter={[24, 24]}>
-        {filtered.map((e) => (
-          <Col xs={24} lg={12} key={e.id}>
-            <Card
-              className="ce-card"
-              title={e.name}
-              extra={
-                <Space>
-                  <Tag color={severityColor(e.severity)}>
-                    {e.severity === "high"
-                      ? "Cao"
-                      : e.severity === "medium"
-                        ? "Trung bình"
-                        : "Thấp"}
+      {loading ? (
+        <div style={{ textAlign: "center", padding: "50px 0" }}>
+          <Spin size="large" />
+        </div>
+      ) : filteredErrors.length > 0 ? (
+        <Row gutter={[24, 24]}>
+          {filteredErrors.map((err) => (
+            <Col xs={24} md={12} lg={6} xl={6} xxl={6} key={err.id}>
+              <Card
+                className="ce-article"
+                title={err.name}
+                extra={
+                  <Tag color={getSeverityColor(err.severity)}>
+                    {getSeverityLabel(err.severity)}
                   </Tag>
-                  {e.tags.map((t) => (
-                    <Tag key={t}>{t}</Tag>
+                }
+              >
+                <Paragraph className="ce-summary">
+                  {getSummary(err.content)}
+                </Paragraph>
+                <div className="ce-tags">
+                  {err.tags?.slice(0, 2).map((t, idx) => (
+                    <Tag key={idx} color="blue">
+                      {t}
+                    </Tag>
                   ))}
-                </Space>
-              }
-            >
-              <Space direction="vertical" size={12} style={{ width: "100%" }}>
-                <div className="ce-section">
-                  <strong>Mô tả lỗi</strong>
-                  <ul>
-                    {e.desc.map((d) => (
-                      <li key={d}>{d}</li>
-                    ))}
-                  </ul>
+                  {err.tags?.length > 2 && <Tag>...</Tag>}
                 </div>
-
-                <div className="ce-section">
-                  <strong>Nguyên nhân gốc</strong>
-                  <ul>
-                    {e.rootCauses.map((d) => (
-                      <li key={d}>{d}</li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="ce-section">
-                  <strong>Hậu quả</strong>
-                  <ul>
-                    {e.consequence.map((d) => (
-                      <li key={d}>{d}</li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="ce-section">
-                  <strong>Dấu hiệu nhận biết</strong>
-                  <ul>
-                    {e.signs.map((d) => (
-                      <li key={d}>{d}</li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="ce-section">
-                  <strong>Cách khắc phục thực tế</strong>
-                  <div className="ce-sub">
-                    <Text>Checklist: {e.fix.checklist.join(" • ")}</Text>
-                  </div>
-                  <div className="ce-sub">
-                    <Text>Quy tắc: {e.fix.rules.join(" • ")}</Text>
-                  </div>
-                  <div className="ce-sub">
-                    <Text>Thói quen: {e.fix.habits.join(" • ")}</Text>
-                  </div>
-                </div>
-
-                <Row gutter={[16, 16]}>
-                  <Col xs={24}>
-                    <Card size="small" title="Ví dụ lệnh thua (ẩn PnL)">
-                      <Space
-                        direction="vertical"
-                        size={8}
-                        style={{ width: "100%" }}
-                      >
-                        {e.examples.loss.map((ex, i) => (
-                          <div key={i} className="ce-example">
-                            <Text strong>{ex.title}</Text>
-                            <Paragraph>{ex.desc}</Paragraph>
-                          </div>
-                        ))}
-                      </Space>
-                    </Card>
-                  </Col>
-                </Row>
-
-                {e.links && (
-                  <div className="ce-section">
-                    <strong>Liên kết học tập</strong>
-                    <Paragraph>{e.links.join(" • ")}</Paragraph>
-                  </div>
-                )}
-
-                <div className="ce-actions">
-                  <Space>
-                    <Button onClick={() => navigate("/study")}>
-                      Nhật ký & Phát hiện lỗi
-                    </Button>
-                    <Button onClick={() => navigate("/library/learning-path")}>
-                      Gợi ý học lại phần yếu
-                    </Button>
-                    <Button
-                      type="primary"
-                      onClick={() => navigate("/library/knowledge")}
-                    >
-                      Mở Thư viện kiến thức
-                    </Button>
-                  </Space>
-                </div>
-              </Space>
-            </Card>
-          </Col>
-        ))}
-      </Row>
-
-      {filtered.length === 0 && (
-        <Card className="ce-empty">
-          <Empty description="Chưa cập nhật" />
-        </Card>
+                <Button
+                  type="primary"
+                  onClick={() =>
+                    navigate(`/library/common-errors-detail/${err.id}`)
+                  }
+                  style={{
+                    backgroundColor: "#4aaf52",
+                    borderColor: "#4aaf52",
+                    width: "100%",
+                    marginTop: "auto",
+                  }}
+                >
+                  Xem chi tiết
+                </Button>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+      ) : (
+        <div className="ce-empty">
+          <Empty description="Không tìm thấy lỗi nào phù hợp" />
+        </div>
       )}
     </div>
   );

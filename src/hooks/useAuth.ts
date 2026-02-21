@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { apiLogin, apiRegister } from "../services/auth";
+import { apiLogin, apiRegister, apiLoginGoogle } from "../services/auth";
 import { getUserAPI } from "../api/user";
 import { useNavigate } from "react-router-dom";
 import { message } from "antd";
@@ -37,6 +37,42 @@ export const useLogin = () => {
     },
     onError: (error: any) => {
       console.log("Login Error:", error);
+      message.error(error?.response?.data?.mes || "Đã có lỗi xảy ra");
+    },
+  });
+};
+
+export const useLoginGoogle = () => {
+  const navigate = useNavigate();
+
+  return useMutation({
+    mutationFn: apiLoginGoogle,
+    onSuccess: async (response) => {
+      const data = response.data;
+
+      if (data.err === 0) {
+        // Save token first
+        localStorage.setItem("profile", JSON.stringify(data));
+
+        try {
+          // Fetch user profile
+          const userRes = await getUserAPI();
+          if (userRes.err === 0) {
+            const fullProfile = { ...data, userData: userRes.userData };
+            localStorage.setItem("profile", JSON.stringify(fullProfile));
+          }
+        } catch (error) {
+          console.error("Error fetching user profile:", error);
+        }
+
+        message.success("Đăng nhập Google thành công!");
+        navigate("/home");
+      } else {
+        message.error(data.mes || "Đăng nhập thất bại");
+      }
+    },
+    onError: (error: any) => {
+      console.log("Login Google Error:", error);
       message.error(error?.response?.data?.mes || "Đã có lỗi xảy ra");
     },
   });

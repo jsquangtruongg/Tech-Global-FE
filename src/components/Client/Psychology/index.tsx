@@ -1220,8 +1220,6 @@ const PsychologyComponent = () => {
         defaultActiveKey="library"
         items={[
           { key: "library", label: "Thư viện cảm xúc", children: LibraryView },
-          { key: "journal", label: "Nhật ký cảm xúc", children: JournalView },
-          { key: "stats", label: "Thống kê cảm xúc", children: StatsView },
           {
             key: "settings",
             label: "Sưu tầm tâm lý",

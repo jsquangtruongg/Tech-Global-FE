@@ -7,7 +7,9 @@ import {
 } from "../../Common/InputCommon";
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { Link } from "react-router-dom";
-import { useRegister } from "../../../hooks/useAuth";
+import { useRegister, useLoginGoogle } from "../../../hooks/useAuth";
+import { useGoogleLogin } from "@react-oauth/google";
+import { Google, Facebook } from "@mui/icons-material";
 
 interface FormErrors {
   firstName?: string;
@@ -28,6 +30,12 @@ const RegisterComponent = () => {
 
   const [errors, setErrors] = useState<FormErrors>({});
   const { mutate: register, isPending } = useRegister();
+  const { mutate: loginGoogle } = useLoginGoogle();
+
+  const googleLogin = useGoogleLogin({
+    onSuccess: (codeResponse) => loginGoogle(codeResponse.access_token),
+    onError: (error) => console.log("Login Failed:", error),
+  });
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -158,6 +166,25 @@ const RegisterComponent = () => {
               style={{ opacity: isPending ? 0.7 : 1 }}
             >
               {isPending ? "Đang đăng ký..." : "Đăng ký"}
+            </button>
+          </div>
+
+          <div className="divider">
+            <span>Hoặc đăng ký với</span>
+          </div>
+
+          <div className="social-login">
+            <button
+              type="button"
+              className="btn-social google"
+              onClick={() => googleLogin()}
+            >
+              <Google className="icon" />
+              <span>Google</span>
+            </button>
+            <button type="button" className="btn-social facebook">
+              <Facebook className="icon" />
+              <span>Facebook</span>
             </button>
           </div>
         </form>

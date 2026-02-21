@@ -33,6 +33,22 @@ export interface IGoldNewsResponse {
   data: IGoldNewsItem[];
 }
 
+export interface IEconomicEvent {
+  title: string;
+  country: string;
+  date: string;
+  time: string;
+  impact: "Low" | "Medium" | "High";
+  forecast: string;
+  previous: string;
+}
+
+export interface IEconomicCalendarResponse {
+  err: number;
+  mess: string;
+  data: IEconomicEvent[];
+}
+
 export const getDashboardDataAPI = async (): Promise<IDashboardResponse> => {
   try {
     const { data } = await API.get("/analytics/dashboard");
@@ -70,6 +86,20 @@ export const getGoldNewsAPI = async (): Promise<IGoldNewsResponse> => {
     };
   }
 };
+
+export const getEconomicCalendarAPI =
+  async (): Promise<IEconomicCalendarResponse> => {
+    try {
+      const { data } = await API.get("/analytics/economic-calendar");
+      return data;
+    } catch (error) {
+      return {
+        err: 1,
+        mess: "Lỗi khi tải lịch kinh tế",
+        data: [],
+      };
+    }
+  };
 
 export const postUserActivityAPI = async (payload: {
   userId?: string | number;
